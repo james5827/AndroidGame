@@ -8,7 +8,7 @@ import android.content.Context;
 
 public class Config
 {
-    private static int colNumbers = 3;
+    private static int colNumbers = 5;
 
     public static void setColNumbers(int colNumbers){
         colNumbers = colNumbers;

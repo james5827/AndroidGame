@@ -1,8 +1,13 @@
 package com.example.jamesoneill.three_in_a_row;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -14,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -25,9 +31,9 @@ public class Play extends AppCompatActivity {
     private int secondColor;
     private boolean useFirst = false;
     private byte[][] colorTracker;
-    private final byte DEFAULT_COLOR = 0;
     private final byte FIRST_COLOR = 1;
     private final byte SECOND_COLOR = 2;
+    private Handler clockHandler;
 
 
     @Override
@@ -54,7 +60,7 @@ public class Play extends AppCompatActivity {
 
         colorTracker = new byte[Config.getColNumbers()][Config.getColNumbers()];
 
-        byte[] randomNumbers = new byte[Config.getColNumbers() - 1];
+        byte[] randomNumbers = new byte[2];
 
         //TODO: Make Check For Three in a row on creation
         randomNumbers[0] = (byte) (Math.random() * numberOfTiles);
@@ -91,16 +97,56 @@ public class Play extends AppCompatActivity {
         gameBoard.setNumColumns(Config.getColNumbers());
         gameBoard.setAdapter(adapter);
 
-        gameBoard.setOnItemClickListener(this::lambdaTest);
+        gameBoard.setOnItemClickListener(this::tileClick);
 
         firstColor = Config.getFirstColor(this);
         secondColor = Config.getSecondColor(this);
+
+        clockHandler = new Handler(Looper.getMainLooper()){
+            @Override
+            public void handleMessage(Message msg) {
+                Bundle bundle = msg.getData();
+                String time = bundle.getString("second");
+
+                TextView view = findViewById(R.id.clockView);
+                view.setText(time);
+            }
+        };
+
+        runCode();
     }
 
-    private void lambdaTest(AdapterView<?> adapterView, View view, int i, long l)
+    public void runCode()
+    {
+        Runnable clock = new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    for(int i = 30; i >= 0; --i) {
+                        Message message = new Message();
+                        Bundle bundle = new Bundle();
+                        Thread.sleep(1000);
+                        bundle.putString("second", "" + i);
+                        message.setData(bundle);
+                        clockHandler.sendMessage(message);
+                    }
+                }catch (InterruptedException exception){
+
+                }
+            }
+        };
+        Thread thread = new Thread(clock);
+        thread.start();
+    }
+
+    private void tileClick(AdapterView<?> adapterView, View view, int i, long l)
     {
         byte x = (byte) (i/Config.getColNumbers());
         byte y = (byte) (i%Config.getColNumbers());
+
+        View preview = findViewById(R.id.previewColor);
+
+        preview.setBackgroundColor(useFirst ? secondColor: firstColor);
 
         view.setBackgroundColor(useFirst ? firstColor: secondColor);
 
@@ -126,6 +172,12 @@ public class Play extends AppCompatActivity {
                 else {
                     break;
                 }
+
+                if(inARow == 3) {
+                    gameOverAlert();
+                    return;
+                }
+
             }catch (ArrayIndexOutOfBoundsException Exception){
                 break;
             }
@@ -140,16 +192,17 @@ public class Play extends AppCompatActivity {
                 else {
                     break;
                 }
+
+                if(inARow == 3) {
+                    gameOverAlert();
+                    return;
+                }
+
             }catch (ArrayIndexOutOfBoundsException Exception){
                 break;
             }
         }
 
-        if(inARow == 3)
-        {
-            gameOverAlert();
-        }
-        else {
             inARow = 1;
 
             for (int i = 1; i <= 2; ++i) {
@@ -159,6 +212,12 @@ public class Play extends AppCompatActivity {
                     } else {
                         break;
                     }
+
+                    if(inARow == 3) {
+                        gameOverAlert();
+                        return;
+                    }
+
                 } catch (ArrayIndexOutOfBoundsException Exception) {
                     break;
                 }
@@ -171,20 +230,39 @@ public class Play extends AppCompatActivity {
                     } else {
                         break;
                     }
+
+                    if(inARow == 3) {
+                        gameOverAlert();
+                        return;
+                    }
+
                 } catch (ArrayIndexOutOfBoundsException Exception) {
                     break;
                 }
             }
-
-            if(inARow == 3)
-                gameOverAlert();
         }
-    }
 
     private void gameOverAlert()
     {
+        GridView gameBoard = findViewById(R.id.game_board);
+        gameBoard.setEnabled(false);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("You Lose").setTitle("Game Over");
+        builder.setMessage(R.string.lose)
+                .setTitle(R.string.lose_title)
+                .setPositiveButton("Play Again", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        finish();
+                        startActivity(getIntent());
+                    }
+                })
+                .setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Intent i = new Intent(getApplicationContext(), Home.class);
+                        startActivity(i);
+                    }
+                });
+
         AlertDialog dialog = builder.create();
         dialog.show();
     }

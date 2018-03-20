@@ -6,4 +6,7 @@
     <string name="h_title">Three In A Row</string>
     <string name="btn_settings">Settings</string>
     <string name="title_activity_play">Play</string>
+    <string name="lose">You Lose</string>
+    <string name="lose_title">Game Over</string>
+    <string name="next_color">Next Color:</string>
 </resources>
