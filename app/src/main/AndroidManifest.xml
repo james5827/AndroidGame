@@ -22,6 +22,10 @@
         <activity
             android:name=".Play"
             android:label="@string/title_activity_play"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Settings"
+            android:label="@string/title_activity_settings"
             android:theme="@style/AppTheme"></activity>
     </application>
 

@@ -49,7 +49,8 @@ public class Home extends AppCompatActivity {
     }
 
     public void openSettingsActivity(View view) {
-
+        Intent settings = new Intent(this, Settings.class);
+        startActivity(settings);
     }
 
     public void openHelpActivity(View view) {

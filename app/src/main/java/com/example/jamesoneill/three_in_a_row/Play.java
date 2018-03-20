@@ -34,14 +34,15 @@ public class Play extends AppCompatActivity {
     private final byte FIRST_COLOR = 1;
     private final byte SECOND_COLOR = 2;
     private Handler clockHandler;
-
+    private Handler timeOutHandler;
+    private boolean activeClock = true;
+    private byte turnTracker = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -78,12 +79,9 @@ public class Play extends AppCompatActivity {
                 --i;
         }
 
-        for(byte val : randomNumbers)
-        {
-           byte x = (byte) (val/Config.getColNumbers());
-           byte y = (byte) (val%Config.getColNumbers());
-
-
+        for(byte val : randomNumbers) {
+            byte x = (byte) (val/Config.getColNumbers());
+            byte y = (byte) (val%Config.getColNumbers());
             colorTracker[x][y] = FIRST_COLOR;
             gridTiles.get(val).setBackgroundColor(color);
         }
@@ -102,45 +100,81 @@ public class Play extends AppCompatActivity {
         firstColor = Config.getFirstColor(this);
         secondColor = Config.getSecondColor(this);
 
+        TextView clock = findViewById(R.id.clockView);
+        clock.setText(formatClockString(Config.getTimerSeconds()));
+
         clockHandler = new Handler(Looper.getMainLooper()){
             @Override
             public void handleMessage(Message msg) {
-                Bundle bundle = msg.getData();
-                String time = bundle.getString("second");
-
-                TextView view = findViewById(R.id.clockView);
-                view.setText(time);
-            }
-        };
-
-        runCode();
-    }
-
-    public void runCode()
-    {
-        Runnable clock = new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    for(int i = 30; i >= 0; --i) {
-                        Message message = new Message();
-                        Bundle bundle = new Bundle();
-                        Thread.sleep(1000);
-                        bundle.putString("second", "" + i);
-                        message.setData(bundle);
-                        clockHandler.sendMessage(message);
-                    }
-                }catch (InterruptedException exception){
-
+                if (activeClock) {
+                    Bundle bundle = msg.getData();
+                    int time = bundle.getInt("second");
+                    clock.setText(formatClockString(time));
                 }
             }
         };
-        Thread thread = new Thread(clock);
-        thread.start();
+
+        timeOutHandler = new Handler(Looper.getMainLooper()){
+            @Override
+            public void handleMessage(Message msg) {
+                Bundle bundle = msg.getData();
+
+                if(bundle.getBoolean("Time Out")) {
+                    gameOverAlert();
+                }
+            }
+        };
+
+        startClock();
+    }
+
+    @Override
+    public void onBackPressed() {
+        activeClock = false;
+        super.onBackPressed();
+    }
+
+    private void startClock()
+    {
+
+        Runnable clock = () -> {
+            try{
+                for(int i = Config.getTimerSeconds(); i >= 0; --i) {
+                    if (activeClock) {
+                        Message message = new Message();
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("second", i);
+                        Thread.sleep(1000);
+                        message.setData(bundle);
+                        clockHandler.sendMessage(message);
+                    }
+                    else
+                        break;
+                }
+            }catch (InterruptedException exception){}
+
+            if(activeClock) {
+                Message message = new Message();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("Time Out", true);
+                message.setData(bundle);
+                timeOutHandler.sendMessage(message);
+            }
+        };
+
+        Thread clockThread = new Thread(clock);
+        clockThread.start();
+    }
+
+    private String formatClockString(int time){
+        int seconds = time%60;
+        return "0" + time/60 + ":" + (seconds < 10 ? "0" + seconds : seconds);
     }
 
     private void tileClick(AdapterView<?> adapterView, View view, int i, long l)
     {
+        ++turnTracker;
+
         byte x = (byte) (i/Config.getColNumbers());
         byte y = (byte) (i%Config.getColNumbers());
 
@@ -172,15 +206,14 @@ public class Play extends AppCompatActivity {
                 else {
                     break;
                 }
-
-                if(inARow == 3) {
-                    gameOverAlert();
-                    return;
-                }
-
             }catch (ArrayIndexOutOfBoundsException Exception){
                 break;
             }
+        }
+
+        if(inARow == 3) {
+            gameOverAlert();
+            return;
         }
 
         for(int i = 1; i <= 2; ++i)
@@ -188,80 +221,90 @@ public class Play extends AppCompatActivity {
             try{
                 if(colorTracker[x][y] == colorTracker[x][y + i]) {
                     ++inARow;
+                    if(inARow == 3) {
+                        gameOverAlert();
+                        return;
+                    }
                 }
                 else {
                     break;
                 }
-
-                if(inARow == 3) {
-                    gameOverAlert();
-                    return;
-                }
-
             }catch (ArrayIndexOutOfBoundsException Exception){
                 break;
             }
         }
 
-            inARow = 1;
+        inARow = 1;
 
-            for (int i = 1; i <= 2; ++i) {
-                try {
-                    if (colorTracker[x][y] == colorTracker[x - i][y]) {
-                        ++inARow;
-                    } else {
-                        break;
-                    }
-
-                    if(inARow == 3) {
-                        gameOverAlert();
-                        return;
-                    }
-
-                } catch (ArrayIndexOutOfBoundsException Exception) {
+        for (int i = 1; i <= 2; ++i) {
+            try {
+                if (colorTracker[x][y] == colorTracker[x - i][y]) {
+                    ++inARow;
+                } else {
                     break;
                 }
-            }
-
-            for (int i = 1; i <= 2; ++i) {
-                try {
-                    if (colorTracker[x][y] == colorTracker[x + i][y]) {
-                        ++inARow;
-                    } else {
-                        break;
-                    }
-
-                    if(inARow == 3) {
-                        gameOverAlert();
-                        return;
-                    }
-
-                } catch (ArrayIndexOutOfBoundsException Exception) {
-                    break;
-                }
+            } catch (ArrayIndexOutOfBoundsException Exception) {
+                break;
             }
         }
 
+        if(inARow == 3) {
+            gameOverAlert();
+            return;
+        }
+
+        for (int i = 1; i <= 2; ++i) {
+            try {
+                if (colorTracker[x][y] == colorTracker[x + i][y]) {
+                    ++inARow;
+                    if(inARow == 3) {
+                        gameOverAlert();
+                    }
+                } else {
+                    break;
+                }
+            } catch (ArrayIndexOutOfBoundsException Exception) {
+                break;
+            }
+        }
+
+        if(turnTracker == Math.pow(Config.getColNumbers(), 2))
+            gameWinAlert();
+    }
+
     private void gameOverAlert()
     {
+        activeClock = false;
         GridView gameBoard = findViewById(R.id.game_board);
         gameBoard.setEnabled(false);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.lose)
                 .setTitle(R.string.lose_title)
-                .setPositiveButton("Play Again", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        finish();
-                        startActivity(getIntent());
-                    }
+                .setPositiveButton("Play Again", (dialog, id) -> {
+                    startActivity(getIntent());
+                    finish();
                 })
-                .setNegativeButton("Back", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Intent i = new Intent(getApplicationContext(), Home.class);
-                        startActivity(i);
-                    }
-                });
+                .setNegativeButton("Back", (dialog, id) -> finish())
+                .setCancelable(false);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void gameWinAlert(){
+        activeClock = false;
+        TextView clock = findViewById(R.id.clockView);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(clock.getText())
+                .setTitle("You Win!")
+                .setPositiveButton("Play Again", (dialog, id) -> {
+                    startActivity(getIntent());
+                    finish();
+                })
+                .setNegativeButton("Back", (dialog, id) -> finish())
+                .setCancelable(false);
 
         AlertDialog dialog = builder.create();
         dialog.show();
