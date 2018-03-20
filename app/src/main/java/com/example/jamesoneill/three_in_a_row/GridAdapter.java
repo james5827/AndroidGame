@@ -23,11 +23,17 @@ public class GridAdapter extends BaseAdapter {
     private Context context;
 
 
-    GridAdapter(ArrayList<View> list, Context context, DisplayMetrics metrics){
+    GridAdapter(ArrayList<View> list, Context context, DisplayMetrics metrics, byte[] randomNumbers){
         super();
         this.list = list;
         this.count = list.size();
-        this.enabled = new boolean[]{true, true, true, true, true, true, true, true, true};
+        this.enabled = new boolean[count];
+
+        for (int i = 0; i < count; ++i)
+            enabled[i] = true;
+
+        for(byte val : randomNumbers)
+            enabled[val] = false;
 
         this.inflater = LayoutInflater.from(context);
 

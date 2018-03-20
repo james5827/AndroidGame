@@ -19,15 +19,6 @@ public class Home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//
-//        builder.setMessage("You Lose")
-//                .setTitle("Game Over");
-//
-//        AlertDialog dialog = builder.create();
-//
-//        dialog.show();
     }
 
     @Override
