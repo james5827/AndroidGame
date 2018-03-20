@@ -52,10 +52,12 @@ public class Play extends AppCompatActivity {
 
         ArrayList<View> gridTiles = new ArrayList<>();
 
-        int color = Config.getFirstColor(this);
+
+        int defaultColor = Config.getDefaultColor();
         byte numberOfTiles = (byte)Math.pow(Config.getColNumbers(), 2);
         for (int i = 0; i< numberOfTiles; ++i) {
             View tile = new View(this);
+            tile.setBackgroundColor(defaultColor);
             gridTiles.add(tile);
         }
 
@@ -79,11 +81,13 @@ public class Play extends AppCompatActivity {
                 --i;
         }
 
+        firstColor = Config.getFirstColor();
+        secondColor = Config.getSecondColor();
         for(byte val : randomNumbers) {
             byte x = (byte) (val/Config.getColNumbers());
             byte y = (byte) (val%Config.getColNumbers());
             colorTracker[x][y] = FIRST_COLOR;
-            gridTiles.get(val).setBackgroundColor(color);
+            gridTiles.get(val).setBackgroundColor(firstColor);
         }
 
         DisplayMetrics metrics = new DisplayMetrics();
@@ -96,9 +100,6 @@ public class Play extends AppCompatActivity {
         gameBoard.setAdapter(adapter);
 
         gameBoard.setOnItemClickListener(this::tileClick);
-
-        firstColor = Config.getFirstColor(this);
-        secondColor = Config.getSecondColor(this);
 
         TextView clock = findViewById(R.id.clockView);
         clock.setText(formatClockString(Config.getTimerSeconds()));

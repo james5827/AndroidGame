@@ -13,6 +13,7 @@ public class Config
     private static int timerSeconds = 30;
     private static int firstColor = Color.BLACK;
     private static int secondColor = Color.WHITE;
+    private static int defaultColor = Color.GRAY;
 
     public static void setColNumbers(int colNumbers){
         colNumbers = colNumbers;
@@ -22,11 +23,19 @@ public class Config
         return colNumbers;
     }
 
+    public static void setDefaultColor(int r, int g, int b){
+        defaultColor = Color.argb(255, r, g, b);
+    }
+
+    public static int getDefaultColor() {
+        return defaultColor;
+    }
+
     public static void setFirstColor(int r, int g, int b){
         firstColor = Color.argb(255, r, g, b);
     }
 
-    public static int getFirstColor(Context context) {
+    public static int getFirstColor() {
         return firstColor;
     }
 
@@ -34,7 +43,7 @@ public class Config
         secondColor = Color.argb(255, r, g, b);
     }
 
-    public static int getSecondColor(Context context) {
+    public static int getSecondColor() {
         return secondColor;
     }
 

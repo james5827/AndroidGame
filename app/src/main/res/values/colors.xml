@@ -7,4 +7,7 @@
     <color name="firstColor">#000000</color>
     <color name="secondColor">#FFFFFF</color>
     <color name="defaultColor">#C7C713</color>
+    <color name="redSeekBar">#ce0a00</color>
+    <color name="greenSeekBar">#00b72e</color>
+    <color name="blueSeekBar">#0051ff</color>
 </resources>

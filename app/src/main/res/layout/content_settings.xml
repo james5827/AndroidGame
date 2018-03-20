@@ -10,12 +10,11 @@
 
     <TabHost
         android:id="@+id/tabHost"
-        android:layout_width="287dp"
-        android:layout_height="300dip"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,6 +37,54 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+                    <TextView
+                        android:id="@+id/default_red_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Red" />
+
+                    <SeekBar
+                        android:id="@+id/default_red_seek"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="255"
+                        android:progressBackgroundTint="@color/redSeekBar"
+                        android:progressTint="@color/redSeekBar"/>
+
+                    <TextView
+                        android:id="@+id/default_green_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Green" />
+
+                    <SeekBar
+                        android:id="@+id/default_green_seek"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="255"
+                        android:progressBackgroundTint="@color/greenSeekBar"
+                        android:progressTint="@color/greenSeekBar"/>
+
+                    <TextView
+                        android:id="@+id/default_blue_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Blue" />
+
+                    <SeekBar
+                        android:id="@+id/default_blue_seek"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="255"
+                        android:progressBackgroundTint="@color/blueSeekBar"
+                        android:progressTint="@color/blueSeekBar"/>
+
+                    <View
+                        android:id="@+id/default_preview"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:background="@color/defaultColor" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -46,6 +93,53 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+                    <TextView
+                        android:id="@+id/color_1_red_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Red" />
+
+                    <SeekBar
+                        android:id="@+id/color_1_red_seek"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="255"
+                        android:progressBackgroundTint="@color/redSeekBar"
+                        android:progressTint="@color/redSeekBar"/>
+
+                    <TextView
+                        android:id="@+id/color_1_green_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Green" />
+
+                    <SeekBar
+                        android:id="@+id/color_1_green_seek"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="255"
+                        android:progressBackgroundTint="@color/greenSeekBar"
+                        android:progressTint="@color/greenSeekBar"/>
+
+                    <TextView
+                        android:id="@+id/color_1_blue_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Blue" />
+
+                    <SeekBar
+                        android:id="@+id/color_1_blue_seek"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="255"
+                        android:progressBackgroundTint="@color/blueSeekBar"
+                        android:progressTint="@color/blueSeekBar"/>
+
+                    <View
+                        android:id="@+id/color_1_preview"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:background="@color/firstColor" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -54,8 +148,68 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
+                    <TextView
+                        android:id="@+id/color_2_red_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Red" />
+
+                    <SeekBar
+                        android:id="@+id/color_2_red_seek"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="255"
+                        android:progressBackgroundTint="@color/redSeekBar"
+                        android:progressTint="@color/redSeekBar"/>
+
+                    <TextView
+                        android:id="@+id/color_2_green_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Green" />
+
+                    <SeekBar
+                        android:id="@+id/color_2_green_seek"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="255"
+                        android:progressBackgroundTint="@color/greenSeekBar"
+                        android:progressTint="@color/greenSeekBar"/>
+
+                    <TextView
+                        android:id="@+id/color_2_blue_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Blue" />
+
+                    <SeekBar
+                        android:id="@+id/color_2_blue_seek"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:max="255"
+                        android:progressBackgroundTint="@color/blueSeekBar"
+                        android:progressTint="@color/blueSeekBar"/>
+
+                    <View
+                        android:id="@+id/color_2_preview"
+                        android:layout_width="match_parent"
+                        android:layout_height="20dp"
+                        android:background="@color/secondColor" />
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
     </TabHost>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:onClick="test"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </android.support.constraint.ConstraintLayout>
