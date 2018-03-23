@@ -31,6 +31,11 @@ public class Settings extends AppCompatActivity {
     private SeekBar color2Green;
     private SeekBar color2Blue;
 
+    private byte currentTab;
+    private final byte DEFAULT_TILE_TAB = 0;
+    private final byte FIRST_TILE_TAB = 1;
+    private final byte SECOND_TILE_TAB = 2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +51,7 @@ public class Settings extends AppCompatActivity {
         initializeSeekBars();
     }
 
-    private void inflateTabs()
-    {
+    private void inflateTabs() {
         TabHost host = findViewById(R.id.tabHost);
         host.setup();
 
@@ -68,24 +72,43 @@ public class Settings extends AppCompatActivity {
         host.addTab(spec);
 
         host.setOnTabChangedListener(this::onTabChange);
+
+        currentTab = DEFAULT_TILE_TAB;
     }
 
     private void onTabChange(String tabId){
         int color = 0;
 
+        int r = 0;
+        int g = 0;
+        int b =0;
+
         switch(tabId){
             case "Default Color":
-               color = Color.argb(255, defaultRed.getProgress(), defaultGreen.getProgress(), defaultBlue.getProgress());
+                r = defaultRed.getProgress();
+                g = defaultGreen.getProgress();
+                b = defaultBlue.getProgress();
+               currentTab = DEFAULT_TILE_TAB;
                 break;
             case "Color One":
-                color = Color.argb(255, color1Red.getProgress(), color1Green.getProgress(), color1Blue.getProgress());
+                r = color1Red.getProgress();
+                g = color1Green.getProgress();
+                b = color1Blue.getProgress();
+                currentTab = FIRST_TILE_TAB;
                 break;
             case "Color Two":
-                color = Color.argb(255, color2Red.getProgress(), color2Green.getProgress(), color2Blue.getProgress());
+                r = color2Red.getProgress();
+                g = color2Green.getProgress();
+                b = color2Blue.getProgress();
+                currentTab = SECOND_TILE_TAB;
                 break;
         }
 
-        preview.setBackgroundColor(color);
+        redBarValue = r;
+        greenBarValue = g;
+        blueBarValue = b;
+
+        preview.setBackgroundColor(Color.argb(255, r, g, b));
     }
 
     private void initializeSeekBars()
@@ -95,6 +118,10 @@ public class Settings extends AppCompatActivity {
         int defaultRedValue = Color.red(defaultColor);
         int defaultGreenValue = Color.green(defaultColor);
         int defaultBlueValue = Color.blue(defaultColor);
+
+        redBarValue = defaultRedValue;
+        greenBarValue = defaultGreenValue;
+        blueBarValue = defaultBlueValue;
 
         defaultRed = findViewById(R.id.default_red_seek);
         defaultGreen = findViewById(R.id.default_green_seek);
@@ -147,11 +174,26 @@ public class Settings extends AppCompatActivity {
         color2Blue.setOnSeekBarChangeListener(new BlueSeekBarChange());
     }
 
+    private void updateConfig(int r, int g, int b)
+    {
+        switch(currentTab){
+            case DEFAULT_TILE_TAB:
+                Config.setDefaultColor(r, g, b);
+                break;
+            case FIRST_TILE_TAB:
+                Config.setFirstColor(r, g, b);
+                break;
+            case SECOND_TILE_TAB:
+                Config.setSecondColor(r, g, b);
+                break;
+        }
+    }
+
 
     private class redSeekBarChange implements SeekBar.OnSeekBarChangeListener {
         @Override
-        public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-            if(b)
+        public void onProgressChanged(SeekBar seekBar, int i, boolean userInput) {
+            if(userInput)
                 preview.setBackgroundColor(Color.argb(255, i, greenBarValue, blueBarValue));
         }
 
@@ -163,43 +205,42 @@ public class Settings extends AppCompatActivity {
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
             redBarValue = seekBar.getProgress();
+            updateConfig(redBarValue, greenBarValue, blueBarValue);
         }
     }
 
     private class GreenSeekBarChange implements SeekBar.OnSeekBarChangeListener {
 
         @Override
-        public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-            if(b)
+        public void onProgressChanged(SeekBar seekBar, int i, boolean userInput) {
+            if(userInput)
                 preview.setBackgroundColor(Color.argb(255, redBarValue, i, blueBarValue));
         }
 
         @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-
-        }
+        public void onStartTrackingTouch(SeekBar seekBar) {}
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
             greenBarValue = seekBar.getProgress();
+            updateConfig(redBarValue, greenBarValue, blueBarValue);
         }
     }
 
     private class BlueSeekBarChange implements SeekBar.OnSeekBarChangeListener {
         @Override
-        public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-            if(b)
+        public void onProgressChanged(SeekBar seekBar, int i, boolean userInput) {
+            if(userInput)
                 preview.setBackgroundColor(Color.argb(255, redBarValue, greenBarValue, i));
         }
 
         @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-
-        }
+        public void onStartTrackingTouch(SeekBar seekBar) {}
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
             blueBarValue = seekBar.getProgress();
+            updateConfig(redBarValue, greenBarValue, blueBarValue);
         }
     }
 }
