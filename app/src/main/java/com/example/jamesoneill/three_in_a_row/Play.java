@@ -50,8 +50,9 @@ public class Play extends AppCompatActivity {
                 Log.i("array", ""+ Arrays.deepToString(colorTracker))
         );
 
-        ArrayList<View> gridTiles = new ArrayList<>();
+        View preview = findViewById(R.id.previewColor);
 
+        ArrayList<View> gridTiles = new ArrayList<>();
 
         int defaultColor = Config.getDefaultColor();
         byte numberOfTiles = (byte)Math.pow(Config.getColNumbers(), 2);
@@ -83,6 +84,9 @@ public class Play extends AppCompatActivity {
 
         firstColor = Config.getFirstColor();
         secondColor = Config.getSecondColor();
+
+        preview.setBackgroundColor(secondColor);
+
         for(byte val : randomNumbers) {
             byte x = (byte) (val/Config.getColNumbers());
             byte y = (byte) (val%Config.getColNumbers());
@@ -137,7 +141,6 @@ public class Play extends AppCompatActivity {
 
     private void startClock()
     {
-
         Runnable clock = () -> {
             try{
                 for(int i = Config.getTimerSeconds(); i >= 0; --i) {

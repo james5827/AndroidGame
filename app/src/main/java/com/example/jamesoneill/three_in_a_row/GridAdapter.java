@@ -69,7 +69,6 @@ public class GridAdapter extends BaseAdapter {
             view.getLayoutParams().height = (int) (gridwidth*density);
             view.getLayoutParams().width = (int) (gridwidth*density);
 
-
             ColorDrawable drawableColor = (ColorDrawable) list.get(position).getBackground();
 
             if(drawableColor != null) {

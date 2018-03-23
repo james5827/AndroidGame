@@ -12,8 +12,10 @@
         android:id="@+id/tabHost"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/colorPreview"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
@@ -49,7 +51,7 @@
                         android:layout_height="wrap_content"
                         android:max="255"
                         android:progressBackgroundTint="@color/redSeekBar"
-                        android:progressTint="@color/redSeekBar"/>
+                        android:progressTint="@color/redSeekBar" />
 
                     <TextView
                         android:id="@+id/default_green_label"
@@ -63,7 +65,7 @@
                         android:layout_height="wrap_content"
                         android:max="255"
                         android:progressBackgroundTint="@color/greenSeekBar"
-                        android:progressTint="@color/greenSeekBar"/>
+                        android:progressTint="@color/greenSeekBar" />
 
                     <TextView
                         android:id="@+id/default_blue_label"
@@ -77,14 +79,7 @@
                         android:layout_height="wrap_content"
                         android:max="255"
                         android:progressBackgroundTint="@color/blueSeekBar"
-                        android:progressTint="@color/blueSeekBar"/>
-
-                    <View
-                        android:id="@+id/default_preview"
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:background="@color/defaultColor" />
-
+                        android:progressTint="@color/blueSeekBar" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -105,7 +100,7 @@
                         android:layout_height="wrap_content"
                         android:max="255"
                         android:progressBackgroundTint="@color/redSeekBar"
-                        android:progressTint="@color/redSeekBar"/>
+                        android:progressTint="@color/redSeekBar" />
 
                     <TextView
                         android:id="@+id/color_1_green_label"
@@ -119,7 +114,7 @@
                         android:layout_height="wrap_content"
                         android:max="255"
                         android:progressBackgroundTint="@color/greenSeekBar"
-                        android:progressTint="@color/greenSeekBar"/>
+                        android:progressTint="@color/greenSeekBar" />
 
                     <TextView
                         android:id="@+id/color_1_blue_label"
@@ -133,13 +128,7 @@
                         android:layout_height="wrap_content"
                         android:max="255"
                         android:progressBackgroundTint="@color/blueSeekBar"
-                        android:progressTint="@color/blueSeekBar"/>
-
-                    <View
-                        android:id="@+id/color_1_preview"
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:background="@color/firstColor" />
+                        android:progressTint="@color/blueSeekBar" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -160,7 +149,7 @@
                         android:layout_height="wrap_content"
                         android:max="255"
                         android:progressBackgroundTint="@color/redSeekBar"
-                        android:progressTint="@color/redSeekBar"/>
+                        android:progressTint="@color/redSeekBar" />
 
                     <TextView
                         android:id="@+id/color_2_green_label"
@@ -174,7 +163,7 @@
                         android:layout_height="wrap_content"
                         android:max="255"
                         android:progressBackgroundTint="@color/greenSeekBar"
-                        android:progressTint="@color/greenSeekBar"/>
+                        android:progressTint="@color/greenSeekBar" />
 
                     <TextView
                         android:id="@+id/color_2_blue_label"
@@ -188,28 +177,17 @@
                         android:layout_height="wrap_content"
                         android:max="255"
                         android:progressBackgroundTint="@color/blueSeekBar"
-                        android:progressTint="@color/blueSeekBar"/>
-
-                    <View
-                        android:id="@+id/color_2_preview"
-                        android:layout_width="match_parent"
-                        android:layout_height="20dp"
-                        android:background="@color/secondColor" />
+                        android:progressTint="@color/blueSeekBar" />
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
     </TabHost>
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:onClick="test"
-        android:text="Button"
+    <View
+        android:id="@+id/colorPreview"
+        android:layout_width="match_parent"
+        android:layout_height="18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>
