@@ -34,11 +34,22 @@ public class Home extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        Intent i = new Intent();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch(id){
+            case R.id.home_menu_play:
+                i = new Intent(this, Play.class);
+                break;
+            case R.id.home_menu_settings:
+                i = new Intent(this, Settings.class);
+                break;
+            case R.id.home_menu_help:
+                i = new Intent(this, Help.class);
+                break;
         }
+
+        startActivity(i);
 
         return super.onOptionsItemSelected(item);
     }

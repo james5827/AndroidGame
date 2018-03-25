@@ -15,6 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -36,7 +38,7 @@ public class Play extends AppCompatActivity {
     private Handler clockHandler;
     private Handler timeOutHandler;
     private boolean activeClock = true;
-    private byte turnTracker = 2;
+    private byte turnTracker = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +66,7 @@ public class Play extends AppCompatActivity {
 
         colorTracker = new byte[Config.getColNumbers()][Config.getColNumbers()];
 
-        byte[] randomNumbers = new byte[2];
+        byte[] randomNumbers = new byte[4];
 
         //TODO: Make Check For Three in a row on creation
         randomNumbers[0] = (byte) (Math.random() * numberOfTiles);
@@ -87,11 +89,21 @@ public class Play extends AppCompatActivity {
 
         preview.setBackgroundColor(secondColor);
 
-        for(byte val : randomNumbers) {
+        //TODO:Please Fix this stupid bullshit
+        byte[] randomNumbers1 = {randomNumbers[0], randomNumbers[1]};
+        for(byte val : randomNumbers1) {
             byte x = (byte) (val/Config.getColNumbers());
             byte y = (byte) (val%Config.getColNumbers());
             colorTracker[x][y] = FIRST_COLOR;
             gridTiles.get(val).setBackgroundColor(firstColor);
+        }
+
+        byte[] randomNumbers2 = {randomNumbers[2], randomNumbers[3]};
+        for(byte val : randomNumbers2) {
+            byte x = (byte) (val/Config.getColNumbers());
+            byte y = (byte) (val%Config.getColNumbers());
+            colorTracker[x][y] = SECOND_COLOR;
+            gridTiles.get(val).setBackgroundColor(secondColor);
         }
 
         DisplayMetrics metrics = new DisplayMetrics();
@@ -131,6 +143,39 @@ public class Play extends AppCompatActivity {
         };
 
         startClock();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_play, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        activeClock = false;
+
+        int id = item.getItemId();
+        Intent i = new Intent();
+
+        switch (id) {
+            case R.id.play_menu_home:
+                i = new Intent(this, Home.class);
+                break;
+            case R.id.play_menu_restart:
+                i = getIntent();
+                break;
+            case R.id.play_menu_settings:
+                i = new Intent(this, Settings.class);
+                break;
+            case R.id.play_menu_help:
+                i = new Intent(this, Help.class);
+                break;
+        }
+
+        startActivity(i);
+        finish();
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

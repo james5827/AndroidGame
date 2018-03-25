@@ -9,18 +9,18 @@ import android.graphics.Color;
 
 public class Config
 {
-    private static int colNumbers = 3;
+    private static int colNumbers = 4;
     private static int timerSeconds = 30;
     private static int firstColor = Color.BLACK;
     private static int secondColor = Color.WHITE;
     private static int defaultColor = Color.GRAY;
 
     public static void setColNumbers(int colNumbers){
-        colNumbers = colNumbers;
+        Config.colNumbers = colNumbers;
     }
 
     public static int getColNumbers() {
-        return colNumbers;
+        return Config.colNumbers;
     }
 
     public static void setDefaultColor(int r, int g, int b){

@@ -1,16 +1,17 @@
 package com.example.jamesoneill.three_in_a_row;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TabHost;
-
-import static android.content.ContentValues.TAG;
+import android.widget.TextView;
 
 public class Settings extends AppCompatActivity {
 
@@ -49,6 +50,91 @@ public class Settings extends AppCompatActivity {
         preview = findViewById(R.id.colorPreview);
 
         initializeSeekBars();
+
+        SeekBar gridSize = findViewById(R.id.gridSeek);
+        TextView lblGridView = findViewById(R.id.lblGridSeek);
+        gridSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                switch(i) {
+                    case 0:
+                        i = 4;
+                        break;
+                    case 1:
+                        i = 5;
+                        break;
+                    case 2:
+                        i = 6;
+                        break;
+                    case 3:
+                        i = 7;
+                        break;
+                }
+                lblGridView.setText(String.format(getString(R.string.grid_size_seek_bar), i));
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                byte colNumber = 0;
+                switch (seekBar.getProgress()){
+                    case 0:
+                        colNumber = 4;
+                        break;
+                    case 1:
+                        colNumber = 5;
+                        break;
+                    case 2:
+                        colNumber = 6;
+                        break;
+                    case 3:
+                        colNumber = 7;
+                        break;
+                }
+                Log.i("WORK", "onStopTrackingTouch: " + colNumber);
+                Config.setColNumbers(colNumber);
+                Log.i("WORK", "onStopTrackingTouch: " + Config.getColNumbers());
+            }
+        });
+        gridSize.setProgress(Config.getColNumbers() -4);
+        lblGridView.setText(String.format(getString(R.string.grid_size_seek_bar), Config.getColNumbers()));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_settings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        int id = item.getItemId();
+        Intent i = new Intent();
+
+        switch (id){
+            case R.id.settings_menu_home:
+                i = new Intent(this, Home.class);
+                break;
+            case R.id.settings_menu_play:
+                i = new Intent(this, Play.class);
+                break;
+            case R.id.settings_menu_reset:
+                resetSettings();
+                i = null;
+                break;
+            case R.id.settings_menu_help:
+                i = new Intent(this, Help.class);
+                break;
+        }
+
+        if(i != null)
+            startActivity(i);
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void resetSettings() {
     }
 
     private void inflateTabs() {
@@ -77,12 +163,9 @@ public class Settings extends AppCompatActivity {
     }
 
     private void onTabChange(String tabId){
-        int color = 0;
-
         int r = 0;
         int g = 0;
         int b =0;
-
         switch(tabId){
             case "Default Color":
                 r = defaultRed.getProgress();
@@ -103,11 +186,9 @@ public class Settings extends AppCompatActivity {
                 currentTab = SECOND_TILE_TAB;
                 break;
         }
-
         redBarValue = r;
         greenBarValue = g;
         blueBarValue = b;
-
         preview.setBackgroundColor(Color.argb(255, r, g, b));
     }
 
@@ -174,8 +255,7 @@ public class Settings extends AppCompatActivity {
         color2Blue.setOnSeekBarChangeListener(new BlueSeekBarChange());
     }
 
-    private void updateConfig(int r, int g, int b)
-    {
+    private void updateConfig(int r, int g, int b) {
         switch(currentTab){
             case DEFAULT_TILE_TAB:
                 Config.setDefaultColor(r, g, b);
@@ -198,9 +278,7 @@ public class Settings extends AppCompatActivity {
         }
 
         @Override
-        public void onStartTrackingTouch(SeekBar seekBar) {
-
-        }
+        public void onStartTrackingTouch(SeekBar seekBar) {}
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {

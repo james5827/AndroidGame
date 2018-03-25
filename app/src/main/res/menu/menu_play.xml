@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.jamesoneill.three_in_a_row.Settings">
+
+    <item
+        android:id="@+id/play_menu_home"
+        android:orderInCategory="101"
+        android:title="@string/home" />
+
+    <item
+        android:id="@+id/play_menu_restart"
+        android:orderInCategory="102"
+        app:showAsAction="ifRoom"
+        android:title="@string/restart"/>
+
+    <item
+        android:id="@+id/play_menu_settings"
+        android:orderInCategory="103"
+        app:showAsAction="never"
+        android:title="@string/settings" />
+
+    <item
+        android:id="@+id/play_menu_help"
+        android:orderInCategory="104"
+        app:showAsAction="never"
+        android:title="@string/help"/>
+</menu>

@@ -26,6 +26,10 @@
         <activity
             android:name=".Settings"
             android:label="@string/title_activity_settings"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Help"
+            android:label="@string/title_activity_help"
             android:theme="@style/AppTheme"></activity>
     </application>
 
