@@ -102,6 +102,12 @@ public class Settings extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop(){
+        Config.saveSettings(this.getApplicationContext());
+        super.onStop();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.menu_settings, menu);
         return true;
@@ -135,6 +141,7 @@ public class Settings extends AppCompatActivity {
     }
 
     private void resetSettings() {
+
     }
 
     private void inflateTabs() {

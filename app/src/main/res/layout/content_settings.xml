@@ -42,7 +42,7 @@
                         android:id="@+id/default_red_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Red" />
+                        android:text="@string/red" />
 
                     <SeekBar
                         android:id="@+id/default_red_seek"
@@ -56,7 +56,7 @@
                         android:id="@+id/default_green_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Green" />
+                        android:text="@string/green" />
 
                     <SeekBar
                         android:id="@+id/default_green_seek"
@@ -70,7 +70,7 @@
                         android:id="@+id/default_blue_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Blue" />
+                        android:text="@string/blue" />
 
                     <SeekBar
                         android:id="@+id/default_blue_seek"
@@ -91,7 +91,7 @@
                         android:id="@+id/color_1_red_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Red" />
+                        android:text="@string/red" />
 
                     <SeekBar
                         android:id="@+id/color_1_red_seek"
@@ -105,7 +105,7 @@
                         android:id="@+id/color_1_green_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Green" />
+                        android:text="@string/green" />
 
                     <SeekBar
                         android:id="@+id/color_1_green_seek"
@@ -119,7 +119,7 @@
                         android:id="@+id/color_1_blue_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Blue" />
+                        android:text="@string/blue" />
 
                     <SeekBar
                         android:id="@+id/color_1_blue_seek"
@@ -140,7 +140,7 @@
                         android:id="@+id/color_2_red_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Red" />
+                        android:text="@string/red" />
 
                     <SeekBar
                         android:id="@+id/color_2_red_seek"
@@ -154,7 +154,7 @@
                         android:id="@+id/color_2_green_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Green" />
+                        android:text="@string/green" />
 
                     <SeekBar
                         android:id="@+id/color_2_green_seek"
@@ -168,7 +168,7 @@
                         android:id="@+id/color_2_blue_label"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Blue" />
+                        android:text="@string/blue" />
 
                     <SeekBar
                         android:id="@+id/color_2_blue_seek"
