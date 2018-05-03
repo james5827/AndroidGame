@@ -13,6 +13,10 @@ import android.widget.SeekBar;
 import android.widget.TabHost;
 import android.widget.TextView;
 
+/**
+ * Activity Class for the settings screen
+ * that houses the inputs that update the config class
+ */
 public class Settings extends AppCompatActivity {
 
     private View preview;
@@ -101,6 +105,10 @@ public class Settings extends AppCompatActivity {
         lblGridView.setText(String.format(getString(R.string.grid_size_seek_bar), Config.getColNumbers()));
     }
 
+    /**
+     * Calls the Config save function in order to save the settings to file
+     * on activity stop
+     */
     @Override
     protected void onStop(){
         Config.saveSettings(this.getApplicationContext());
@@ -140,10 +148,16 @@ public class Settings extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Reset all settings to default and save to SharedPreferences
+     */
     private void resetSettings() {
 
     }
 
+    /**
+     * Create Tab View
+     */
     private void inflateTabs() {
         TabHost host = findViewById(R.id.tabHost);
         host.setup();
@@ -169,6 +183,10 @@ public class Settings extends AppCompatActivity {
         currentTab = DEFAULT_TILE_TAB;
     }
 
+    /**
+     * Update the color seekBars and color preview onTabChange
+     * @param tabId - the title of the tab
+     */
     private void onTabChange(String tabId){
         int r = 0;
         int g = 0;
@@ -199,6 +217,9 @@ public class Settings extends AppCompatActivity {
         preview.setBackgroundColor(Color.argb(255, r, g, b));
     }
 
+    /**
+     * Loads the current color values and presets the seek bars
+     */
     private void initializeSeekBars()
     {
         int defaultColor = Config.getDefaultColor();
@@ -262,6 +283,12 @@ public class Settings extends AppCompatActivity {
         color2Blue.setOnSeekBarChangeListener(new BlueSeekBarChange());
     }
 
+    /**
+     * Updates the config color value
+     * @param r - Red Value
+     * @param g - Green Value
+     * @param b - Blue Value
+     */
     private void updateConfig(int r, int g, int b) {
         switch(currentTab){
             case DEFAULT_TILE_TAB:
@@ -276,7 +303,11 @@ public class Settings extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Inner Class for the SeekBar updates
+     * the preview color during SeekBar Change
+     * and saves it afterwards
+     */
     private class redSeekBarChange implements SeekBar.OnSeekBarChangeListener {
         @Override
         public void onProgressChanged(SeekBar seekBar, int i, boolean userInput) {
@@ -294,6 +325,11 @@ public class Settings extends AppCompatActivity {
         }
     }
 
+    /**
+     * Inner Class for the SeekBar updates
+     * the preview color during SeekBar Change
+     * and saves it afterwards
+     */
     private class GreenSeekBarChange implements SeekBar.OnSeekBarChangeListener {
 
         @Override
@@ -312,6 +348,11 @@ public class Settings extends AppCompatActivity {
         }
     }
 
+    /**
+     * Inner Class for the SeekBar updates
+     * the preview color during SeekBarChange
+     * and saves it afterwards
+     */
     private class BlueSeekBarChange implements SeekBar.OnSeekBarChangeListener {
         @Override
         public void onProgressChanged(SeekBar seekBar, int i, boolean userInput) {

@@ -10,6 +10,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+/**
+ * Activity class for the help screen
+ * This activity presents the user with
+ * Instructions on how to play the game
+ */
 public class Help extends AppCompatActivity {
 
     @Override

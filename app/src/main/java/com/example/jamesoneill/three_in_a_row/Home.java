@@ -11,6 +11,11 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+/**
+ * Activity class for the home screen that
+ * this screen acts as the navigation hub
+ * and displays the current high scores
+ */
 public class Home extends AppCompatActivity {
 
     @Override
@@ -56,17 +61,30 @@ public class Home extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Opens the play activity
+     * @param view the button that was clicked
+     */
     public void openPlayActivity(View view) {
         Intent play = new Intent(this, Play.class);
         startActivity(play);
     }
 
+    /**
+     * Opens the settings activity
+     * @param view the button that was clicked
+     */
     public void openSettingsActivity(View view) {
         Intent settings = new Intent(this, Settings.class);
         startActivity(settings);
     }
 
+    /**
+     * Opens the help activity
+     * @param view the button that was clicked
+     */
     public void openHelpActivity(View view) {
-
+        Intent help = new Intent(this, Help.class);
+        startActivity(help);
     }
 }
