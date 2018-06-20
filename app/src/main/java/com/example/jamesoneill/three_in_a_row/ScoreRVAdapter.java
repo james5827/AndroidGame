@@ -35,7 +35,7 @@ public class ScoreRVAdapter extends RecyclerView.Adapter<ScoreRVAdapter.ViewHold
     public void onBindViewHolder(@NonNull ScoreRVAdapter.ViewHolder holder, int position) {
         final Score score = this.items.get(position);
         Log.i("scores", "onBindViewHolder: " + score.toString());
-        holder.text.setText((++position) + " " + score.getName() + " " + score.getTime());
+        holder.text.setText((++position) + " " + score.getName() + " " + score.getTime() + " Seconds Left");
     }
 
     @Override

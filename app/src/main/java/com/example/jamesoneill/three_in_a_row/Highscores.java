@@ -32,17 +32,12 @@ public class Highscores extends AppCompatActivity {
     }
 
     public void displayScores(View view){
-        Log.i("scores", "displayScores: " + gridSizeSeek.getProgress() + " " + difficultySpinner.getSelectedItem().toString());
-
         HighscoreDatabase db = new HighscoreDatabase(this);
 
         List<Score> scores = db.getHighScores(difficultySpinner.getSelectedItem().toString(), (byte) (gridSizeSeek.getProgress() + 4));
 
-        Log.i("scores", "displayScores: " + scores.toString());
-
         RecyclerView recyclerView = findViewById(R.id.highScoreRecyclerView);
-        ScoreRVAdapter adapter = new ScoreRVAdapter(this, scores);
-        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(new ScoreRVAdapter(this, scores));
     }
 
     private void initialiseGridSizeSeekBar(){
@@ -76,5 +71,4 @@ public class Highscores extends AppCompatActivity {
         this.gridSizeSeek.setProgress(Config.getColNumbers() -4);
         gridViewlbl.setText(String.format(getString(R.string.grid_size_seek_bar), Config.getColNumbers()));
     }
-
 }

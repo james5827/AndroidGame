@@ -1,10 +1,13 @@
 package com.example.jamesoneill.three_in_a_row;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -16,10 +19,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.BufferedOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Activity class that houses the play screen
@@ -32,7 +41,7 @@ public class Play extends AppCompatActivity {
     private int firstColor;
     private int secondColor;
     private boolean useFirst = false;
-
+    private String TAG = "State";
     /*
       Parallel array that translates to the one dimensional
       grid array in order to ease manipulation and the execution of game logic
@@ -57,79 +66,121 @@ public class Play extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view ->
-                Log.i("array", ""+ Arrays.deepToString(colorTracker))
-        );
+        int defaultColor = Config.getDefaultColor();
+        firstColor = Config.getFirstColor();
+        secondColor = Config.getSecondColor();
+        byte numberOfTiles = (byte)Math.pow(Config.getColNumbers(), 2);
 
-        //View that displays the next color
-        View preview = findViewById(R.id.previewColor);
+        byte[] initiatedColors;
+        byte[] firstColorArray;
+        byte[] secondColorArray;
 
         ArrayList<View> gridTiles = new ArrayList<>();
-
         //Sets all view background color and adds it to the array
-        int defaultColor = Config.getDefaultColor();
-        byte numberOfTiles = (byte)Math.pow(Config.getColNumbers(), 2);
         for (int i = 0; i< numberOfTiles; ++i) {
             View tile = new View(this);
             tile.setBackgroundColor(defaultColor);
             gridTiles.add(tile);
         }
 
-        colorTracker = new byte[Config.getColNumbers()][Config.getColNumbers()];
+        if (savedInstanceState != null) {
+            Log.i("State", "onCreate: Restoring State ");
 
-        //array that tracks the tiles to be pre-selected
-        byte[] randomNumbers = new byte[4];
+            byte[] initGridColor = new byte[Config.getColNumbers() * Config.getColNumbers()];
 
-        //sets the first value to be preselected
-        randomNumbers[0] = (byte) (Math.random() * numberOfTiles);
-        //sets the rest of the values to be preselected
-        //and checks if that value is already in the array
-        for (byte i = 1; i < randomNumbers.length; ++i)
-        {
-            byte primary = (byte) (Math.random() * numberOfTiles);
-            boolean valid = true;
-            for(byte x = (byte)(i - 1); x >= 0; --x)
-                if (primary == randomNumbers[x]) {
-                    valid = false;
-                    break;
+            byte position = 0;
+            colorTracker = (byte[][]) savedInstanceState.getSerializable("colorTracker");
+
+            byte firstColorCount = 0;
+            byte secondColorCount = 0;
+            for(byte i = 0; i < colorTracker.length; ++i){
+                for (byte x = 0; x < colorTracker[i].length; ++x, ++position) {
+                    initGridColor[position] = colorTracker[i][x];
+                    if(initGridColor[position] == 1){
+                        ++firstColorCount;
+                    }
+                    if (initGridColor[position] == 2){
+                        ++secondColorCount;
+                    }
                 }
+            }
 
-            if(valid)
-                randomNumbers[i] = primary;
-            else
-                --i;
+            initiatedColors = new byte[firstColorCount + secondColorCount];
+
+            position = 0;
+            for(byte i = 0, x = 0; i< initGridColor.length; ++i, ++position){
+                if (initGridColor[i] == 1 || initGridColor[i] == 2) {
+                    initiatedColors[x] = position;
+                    ++x;
+
+                    if(initGridColor[i] == 2){
+                        gridTiles.get(i).setBackgroundColor(secondColor);
+                    } else {
+                        gridTiles.get(i).setBackgroundColor(firstColor);
+                    }
+                }
+            }
+
+            Log.i(TAG, "onCreate: initgridcolor" + Arrays.toString(initGridColor));
+            Log.i(TAG, "onCreate: test" + Arrays.deepToString(colorTracker));
+            Log.i(TAG, "onCreate: enabledArray" + Arrays.toString(initiatedColors));
+
+        } else {
+
+            colorTracker = new byte[Config.getColNumbers()][Config.getColNumbers()];
+            //array that tracks the tiles to be pre-selected
+            initiatedColors = new byte[4];
+
+            //sets the first value to be preselected
+            initiatedColors[0] = (byte) (Math.random() * numberOfTiles);
+
+            //sets the rest of the values to be preselected
+            //and checks if that value is already in the array
+            for (byte i = 1; i < initiatedColors.length; ++i) {
+                byte primary = (byte) (Math.random() * numberOfTiles);
+                boolean valid = true;
+                for(byte x = (byte)(i - 1); x >= 0; --x)
+                    if (primary == initiatedColors[x]) {
+                        valid = false;
+                        break;
+                    }
+
+                if(valid)
+                    initiatedColors[i] = primary;
+                else
+                    --i;
+            }
+
+            //set half of the random numbers array to the first color
+            firstColorArray = new byte[]{initiatedColors[0], initiatedColors[1]};
+            for(byte val : firstColorArray) {
+                byte x = (byte) (val/Config.getColNumbers());
+                byte y = (byte) (val%Config.getColNumbers());
+                colorTracker[x][y] = FIRST_COLOR;
+                gridTiles.get(val).setBackgroundColor(firstColor);
+            }
+
+            secondColorArray = new byte[]{initiatedColors[2], initiatedColors[3]};
+            for(byte val : secondColorArray) {
+                byte x = (byte) (val/Config.getColNumbers());
+                byte y = (byte) (val%Config.getColNumbers());
+                colorTracker[x][y] = SECOND_COLOR;
+                gridTiles.get(val).setBackgroundColor(secondColor);
+            }
         }
 
-        firstColor = Config.getFirstColor();
-        secondColor = Config.getSecondColor();
-
-        preview.setBackgroundColor(secondColor);
-
-        //set half of the random numbers array to the first color
-        byte[] randomNumbers1 = {randomNumbers[0], randomNumbers[1]};
-        for(byte val : randomNumbers1) {
-            byte x = (byte) (val/Config.getColNumbers());
-            byte y = (byte) (val%Config.getColNumbers());
-            colorTracker[x][y] = FIRST_COLOR;
-            gridTiles.get(val).setBackgroundColor(firstColor);
-        }
+        //View that displays the next color
+        View preview = findViewById(R.id.previewColor);
 
         //set half the random numbers array to the second color
-        byte[] randomNumbers2 = {randomNumbers[2], randomNumbers[3]};
-        for(byte val : randomNumbers2) {
-            byte x = (byte) (val/Config.getColNumbers());
-            byte y = (byte) (val%Config.getColNumbers());
-            colorTracker[x][y] = SECOND_COLOR;
-            gridTiles.get(val).setBackgroundColor(secondColor);
-        }
 
+        preview.setBackgroundColor(secondColor);
         //get application display metrics
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         //construct grid
-        GridAdapter adapter = new GridAdapter(gridTiles, this, metrics, randomNumbers);
+        GridAdapter adapter = new GridAdapter(gridTiles, this, metrics, initiatedColors);
         GridView gameBoard = findViewById(R.id.game_board);
 
         gameBoard.setNumColumns(Config.getColNumbers());
@@ -166,6 +217,17 @@ public class Play extends AppCompatActivity {
         };
 
         startClock();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        this.activeClock = false;
+
+        outState.putSerializable("colorTracker", colorTracker);
+
+        Log.i("State", "onSaveInstanceState: Saving");
     }
 
     @Override
@@ -272,6 +334,8 @@ public class Play extends AppCompatActivity {
         //convert to 2 dimensional array from tile position
         byte x = (byte) (i/Config.getColNumbers());
         byte y = (byte) (i%Config.getColNumbers());
+
+        Log.i("State", "tileClick: " + Arrays.deepToString(colorTracker));
 
         //update the preview color
         View preview = findViewById(R.id.previewColor);
@@ -412,7 +476,46 @@ public class Play extends AppCompatActivity {
         TextView clock = findViewById(R.id.clockView);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(clock.getText())
+
+        if(compareTimes(clock.getText().toString())){
+
+            String difficulty = "";
+
+            switch (Config.getTimerSeconds()){
+                case 45:
+                    difficulty = "Easy";
+                    break;
+                case 30:
+                    difficulty = "Medium";
+                    break;
+                case 15:
+                    difficulty = "Hard";
+                    break;
+            }
+
+            View view = getLayoutInflater().inflate(R.layout.highscore_dialog, null);
+            Button quitBtn = view.findViewById(R.id.quitBtn);
+            Button submitBtn = view.findViewById(R.id.submitBtn);
+            EditText editText = view.findViewById(R.id.nameEditText);
+
+            String finalDifficulty = difficulty;
+            submitBtn.setOnClickListener((View view2) -> {
+                Score score = new Score(1,
+                        editText.getText().toString(),
+                        (byte)Config.getColNumbers(),
+                        finalDifficulty,
+                        clock.getText().toString());
+
+                HighscoreDatabase db = new HighscoreDatabase(this);
+                db.insertScore(score);
+                finish();
+            });
+
+            quitBtn.setOnClickListener((View view1) -> finish());
+
+            builder.setView(view);
+        } else {
+            builder.setMessage(clock.getText())
                 .setTitle("You Win!")
                 .setPositiveButton("Play Again", (dialog, id) -> {
                     startActivity(getIntent());
@@ -420,11 +523,44 @@ public class Play extends AppCompatActivity {
                 })
                 .setNegativeButton("Back", (dialog, id) -> finish())
                 .setCancelable(false);
+        }
 
         AlertDialog dialog = builder.create();
-
         dialog.getWindow().setGravity(Gravity.BOTTOM);
-
         dialog.show();
+    }
+
+    private boolean compareTimes(String time){
+        HighscoreDatabase db = new HighscoreDatabase(this);
+
+        String difficulty = "";
+
+        switch (Config.getTimerSeconds()){
+            case 45:
+                difficulty = "Easy";
+                break;
+            case 30:
+                difficulty = "Medium";
+                break;
+            case 15:
+                difficulty = "Hard";
+                break;
+        }
+
+        List<Score> scores = db.getHighScores(difficulty, (byte)Config.getColNumbers());
+
+        if(scores.size() <= 10) {
+            return true;
+        } else {
+            int size = scores.size();
+            for (byte x = 0; x < size; ++x){
+                if(time.compareTo(scores.get(x).getTime()) < 0) {
+                    db.deleteScore(scores.get(--size).getId());
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 }

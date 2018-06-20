@@ -3,6 +3,7 @@ package com.example.jamesoneill.three_in_a_row;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,9 +50,15 @@ public class GridAdapter extends BaseAdapter {
 
         //Sets the tile width
         if(metrics.widthPixels < metrics.heightPixels)
+        {
             this.gridwidth = Math.round(((metrics.widthPixels/metrics.density) - (COL_SPACING * (COL_NO - 1)) - (MARGIN * 2))/COL_NO);
+            Log.i("size", "GridAdapter: height is greater than width" + this.gridwidth + " " + metrics.widthPixels);
+        }
         else
+        {
             this.gridwidth = Math.round(((metrics.heightPixels/metrics.density) - (COL_SPACING * (COL_NO - 1)) - (MARGIN * 2) - 75)/COL_NO);
+            Log.i("size", "GridAdapter: width is greater than height " + this.gridwidth + " " + metrics.widthPixels + " " + metrics.heightPixels);
+        }
 
         //Determines the pixel density of the device
         this.density = metrics.density;

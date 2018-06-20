@@ -21,8 +21,6 @@ public class HighscoreDatabase extends SQLiteOpenHelper implements DatabaseHelpe
         sqLiteDatabase.execSQL(TEST_Easy);
         sqLiteDatabase.execSQL(TEST_Medium);
         sqLiteDatabase.execSQL(TEST_Hard);
-
-        Log.d(TAG, "onCreate: Created Table");
     }
 
     @Override
@@ -36,7 +34,7 @@ public class HighscoreDatabase extends SQLiteOpenHelper implements DatabaseHelpe
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_SCORE_ID, "NULL");
+//        values.put(KEY_SCORE_ID, "NULL");
         values.put(KEY_SCORE_NAME, score.getName());
         values.put(KEY_SCORE_GRIDSIZE, score.getGridSize());
         values.put(KEY_SCORE_DIFFICULTY, score.getDifficulty());
@@ -44,6 +42,12 @@ public class HighscoreDatabase extends SQLiteOpenHelper implements DatabaseHelpe
 
         db.insertOrThrow(TABLE_Scores, null ,values);
         db.close();
+    }
+
+    public void deleteScore(int id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        db.delete(TABLE_Scores, "id = " + id, null);
     }
 
     public ArrayList<Score> getHighScores(String difficulty, byte gridSize){
@@ -54,16 +58,15 @@ public class HighscoreDatabase extends SQLiteOpenHelper implements DatabaseHelpe
                 "SELECT * FROM " + TABLE_Scores + " " +
                         "WHERE " + KEY_SCORE_GRIDSIZE + " = " + gridSize + " " +
                         "AND " + KEY_SCORE_DIFFICULTY + " = ? " +
-                        "ORDER BY " + KEY_SCORE_TIME + " ASC  " +
+                        "ORDER BY " + KEY_SCORE_TIME + " DESC  " +
                         "LIMIT 10";
-
-        Log.i("scores", "getHighScores: " + sql);
 
        Cursor c = db.rawQuery(sql, new String[] {difficulty});
 
         if(c.moveToFirst())
             do {
                 scores.add(new Score(
+                        c.getInt(c.getColumnIndex(KEY_SCORE_ID)),
                         c.getString(c.getColumnIndex(KEY_SCORE_NAME)),
                         (byte) c.getInt(c.getColumnIndex(KEY_SCORE_GRIDSIZE)),
                         c.getString(c.getColumnIndex(KEY_SCORE_DIFFICULTY)),
