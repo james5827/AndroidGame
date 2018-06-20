@@ -15,7 +15,7 @@ public class Config
 {
     //settings
     private static int colNumbers;
-    private static int timerSeconds = 30;
+    private static int timerSeconds;
     private static int firstColor;
     private static int secondColor;
     private static int defaultColor;
@@ -27,15 +27,16 @@ public class Config
     public static void loadSettings(Context context){
         SharedPreferences preferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
 
-        colNumbers = preferences.getInt("colNumbers", 4);
-        firstColor = preferences.getInt("defaultColor", Color.GRAY);
-        secondColor = preferences.getInt("firstColor", Color.BLACK);
-        defaultColor = preferences.getInt("secondColor", Color.WHITE);
+        Config.colNumbers = preferences.getInt("colNumbers", 4);
+        Config.defaultColor = preferences.getInt("defaultColor", Color.GRAY);
+        Config.firstColor = preferences.getInt("firstColor", Color.BLACK);
+        Config.secondColor = preferences.getInt("secondColor", Color.WHITE);
+        Config.timerSeconds = preferences.getInt("timerSeconds", 30);
     }
 
     /**
      * Save settings to sharedPreference
-     * @param context
+     * @param context - application context in which to access Shared Preferences
      */
     public static void saveSettings(Context context){
         SharedPreferences preferences = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
@@ -45,7 +46,7 @@ public class Config
         editor.putInt("defaultColor", getDefaultColor());
         editor.putInt("firstColor", getFirstColor());
         editor.putInt("secondColor", getSecondColor());
-
+        editor.putInt("timerSeconds", getTimerSeconds());
         editor.commit();
     }
 
@@ -134,6 +135,4 @@ public class Config
     public static int getTimerSeconds() {
         return Config.timerSeconds;
     }
-
-
 }

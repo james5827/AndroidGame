@@ -37,13 +37,8 @@ public class Home extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         Intent i = new Intent();
-
-        //noinspection SimplifiableIfStatement
         switch(id){
             case R.id.home_menu_play:
                 i = new Intent(this, Play.class);
@@ -57,7 +52,6 @@ public class Home extends AppCompatActivity {
         }
 
         startActivity(i);
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -86,5 +80,9 @@ public class Home extends AppCompatActivity {
     public void openHelpActivity(View view) {
         Intent help = new Intent(this, Help.class);
         startActivity(help);
+    }
+
+    public void openHighScoresActivity(View view) {
+        startActivity(new Intent(this, Highscores.class));
     }
 }

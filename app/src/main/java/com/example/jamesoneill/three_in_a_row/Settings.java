@@ -9,7 +9,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -41,7 +43,6 @@ public class Settings extends AppCompatActivity {
     private final byte FIRST_TILE_TAB = 1;
     private final byte SECOND_TILE_TAB = 2;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +56,30 @@ public class Settings extends AppCompatActivity {
 
         initializeSeekBars();
 
+        Spinner spinner = findViewById(R.id.settingsSpinner);
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                byte secs = 0;
+                switch (spinner.getSelectedItem().toString()){
+                    case "Easy":
+                        secs = 45;
+                        break;
+                    case "Medium":
+                        secs = 30;
+                        break;
+                    case "Hard":
+                        secs = 15;
+                        break;
+                }
+
+                Config.setTimerSeconds(secs);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
         SeekBar gridSize = findViewById(R.id.gridSeek);
         TextView lblGridView = findViewById(R.id.lblGridSeek);
         gridSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
@@ -96,11 +121,22 @@ public class Settings extends AppCompatActivity {
                         colNumber = 7;
                         break;
                 }
-                Log.i("WORK", "onStopTrackingTouch: " + colNumber);
                 Config.setColNumbers(colNumber);
-                Log.i("WORK", "onStopTrackingTouch: " + Config.getColNumbers());
             }
         });
+
+        switch (Config.getTimerSeconds()){
+            case 45:
+                spinner.setSelection(0, true);
+                break;
+            case 30:
+                spinner.setSelection(1, true);
+                break;
+            case 15:
+                spinner.setSelection(2, true);
+                break;
+        }
+
         gridSize.setProgress(Config.getColNumbers() -4);
         lblGridView.setText(String.format(getString(R.string.grid_size_seek_bar), Config.getColNumbers()));
     }
@@ -370,5 +406,3 @@ public class Settings extends AppCompatActivity {
         }
     }
 }
-
-

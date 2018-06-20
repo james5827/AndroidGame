@@ -9,6 +9,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 /**
  * Activity class for the help screen
@@ -25,12 +29,21 @@ public class Help extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
+        fab.setOnClickListener((View view) -> {
+                    Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                });
+
+        Button tutorial = findViewById(R.id.button);
+        tutorial.setOnClickListener((view) -> {
+            new ShowcaseView.Builder(this)
+                    .withNewStyleShowcase()
+                    .setStyle(R.style.CustomShowcaseTheme)
+                    .blockAllTouches()
+                    .setTarget(new ViewTarget(R.id.button, this))
+                    .setContentTitle("Showcase View Library")
+                    .setContentText("This Library Will Be Used For An In App Tutorial")
+                    .build();
         });
     }
 

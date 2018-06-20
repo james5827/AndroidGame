@@ -21,4 +21,14 @@
     <string name="blue">Blue</string>
     <string name="green">Green</string>
     <string name="red">Red</string>
+    <string name="title_activity_highscores">Highscores</string>
+    <string name="show_high_scores">Show High Scores</string>
+    <string name="high_scores">High Scores</string>
+    <string name="difficulty">Difficulty:</string>
+
+    <string-array name="difficulty_array">
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+    </string-array>
 </resources>

@@ -1,29 +1,23 @@
 package com.example.jamesoneill.three_in_a_row;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.TextView;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -246,7 +240,6 @@ public class Play extends AppCompatActivity {
                 timeOutHandler.sendMessage(message);
             }
         };
-
         Thread clockThread = new Thread(clock);
         clockThread.start();
     }
@@ -295,7 +288,7 @@ public class Play extends AppCompatActivity {
         adapter.enabled[i] = false;
         useFirst = !useFirst;
 
-        //run gamelogic
+        //run game logic
         gameLogic(x, y);
     }
 
@@ -309,8 +302,7 @@ public class Play extends AppCompatActivity {
     {
         //Left of tile check
         byte inARow = 1;
-        for(int i = 1; i <= 2; ++i)
-        {
+        for(int i = 1; i <= 2; ++i) {
             try{
                 if(colorTracker[x][y] == colorTracker[x][y - i]) {
                     ++inARow;
@@ -329,8 +321,7 @@ public class Play extends AppCompatActivity {
         }
 
         //Right of tile check
-        for(int i = 1; i <= 2; ++i)
-        {
+        for(int i = 1; i <= 2; ++i) {
             try{
                 if(colorTracker[x][y] == colorTracker[x][y + i]) {
                     ++inARow;
@@ -407,6 +398,9 @@ public class Play extends AppCompatActivity {
                 .setCancelable(false);
 
         AlertDialog dialog = builder.create();
+
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
         dialog.show();
     }
 
@@ -428,6 +422,9 @@ public class Play extends AppCompatActivity {
                 .setCancelable(false);
 
         AlertDialog dialog = builder.create();
+
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
         dialog.show();
     }
 }

@@ -36,7 +36,7 @@ public class GridAdapter extends BaseAdapter {
         this.count = list.size();
         this.enabled = new boolean[count];
 
-        //Sets all tiles in the parrallel enabled array to true
+        //Sets all tiles in the parallel enabled array to true
         for (int i = 0; i < count; ++i)
             enabled[i] = true;
 
