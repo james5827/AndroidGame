@@ -1,6 +1,8 @@
 package com.example.jamesoneill.three_in_a_row;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +16,10 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TextView;
+
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 /**
  * Activity Class for the settings screen
@@ -139,6 +145,10 @@ public class Settings extends AppCompatActivity {
 
         gridSize.setProgress(Config.getColNumbers() -4);
         lblGridView.setText(String.format(getString(R.string.grid_size_seek_bar), Config.getColNumbers()));
+
+        if(getIntent().hasExtra(Config.TUTORIAL)){
+            tutorialShowCaseView();
+        }
     }
 
     /**
@@ -403,6 +413,84 @@ public class Settings extends AppCompatActivity {
         public void onStopTrackingTouch(SeekBar seekBar) {
             blueBarValue = seekBar.getProgress();
             updateConfig(redBarValue, greenBarValue, blueBarValue);
+        }
+    }
+
+    public void tutorialShowCaseView(){
+        new Settings.scvSettingsTutorial(this);
+    }
+
+    private static class scvSettingsTutorial implements View.OnClickListener{
+        private byte counter;
+        private ShowcaseView scv;
+        private Activity context;
+
+        private scvSettingsTutorial(Activity context) {
+            this.counter = 0;
+            this.context = context;
+            this.scv = new ShowcaseView.Builder(context)
+                    .withNewStyleShowcase()
+                    .setStyle(R.style.CustomShowcaseTheme)
+                    .setTarget(Target.NONE)
+                    .setContentTitle("This is the Settings screen")
+                    .setContentText("Here you can alter the in game settings")
+                    .setOnClickListener(this)
+                    .build();
+
+            scv.setButtonText("Next");
+        }
+
+        @Override
+        public void onClick(View view) {
+            switch (counter) {
+                case 0:
+                    scv.setShowcase(new ViewTarget(R.id.lblGridSeek, context), true);
+                    scv.setContentTitle("Grid Size Seek Bar");
+                    scv.setContentText("This seek bar controls the size of the game grid");
+                    break;
+                case 1:
+                    scv.setShowcase(new ViewTarget(R.id.gridSeek, context), true);
+                    scv.setContentText("Slide the button to change the value");
+                    break;
+                case 2:
+                    scv.setShowcase(new ViewTarget(R.id.settingsDifficultyLabel, context), true);
+                    scv.setContentTitle("Difficulty Select Box");
+                    scv.setContentText("This changes time you have to fill the grid");
+                    break;
+                case 3:
+                    scv.setShowcase(new ViewTarget(R.id.settingsSpinner, context), true);
+                    scv.setContentText("Easy is 45 secs, Medium is 30 secs, Hard is 15 secs");
+                    break;
+                case 4:
+                    scv.setShowcase(new ViewTarget(R.id.tabHost, context), true);
+                    scv.setContentTitle("Color Tabs");
+                    scv.setContentText("The tabs represent the grid colors and the sliders change the color values");
+                    break;
+                case 5:
+                    scv.setShowcase(new ViewTarget(R.id.default_red_seek, context), true);
+                    scv.setContentTitle("Red Seek");
+                    scv.setContentText("Controls the red value");
+                    break;
+                case 6:
+                    scv.setShowcase(new ViewTarget(R.id.default_green_seek, context), true);
+                    scv.setContentTitle("Green Seek");
+                    scv.setContentText("Controls the green value");
+                    break;
+                case 7:
+                    scv.setShowcase(new ViewTarget(R.id.default_blue_seek, context), true);
+                    scv.setContentTitle("Blue Seek");
+                    scv.setContentText("Controls the blue value of the color");
+                    break;
+                case 8:
+                    scv.setShowcase(new ViewTarget(R.id.colorPreview, context), true);
+                    scv.setContentTitle("Color Preview");
+                    scv.setContentText("As you update the sliders this preview color will change");
+                    break;
+                case 9:
+                    scv.hide();
+                    Config.createShowCaseIntent(context, Highscores.class);
+            }
+            ++counter;
         }
     }
 }

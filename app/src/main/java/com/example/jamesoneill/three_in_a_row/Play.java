@@ -1,6 +1,8 @@
 package com.example.jamesoneill.three_in_a_row;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,8 +22,11 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -206,7 +211,12 @@ public class Play extends AppCompatActivity {
             }
         };
 
-        startClock();
+        if(getIntent().hasExtra(Config.TUTORIAL)){
+            tutorialShowCaseView();
+        }
+        else{
+            startClock();
+        }
     }
 
     @Override
@@ -516,7 +526,7 @@ public class Play extends AppCompatActivity {
         }
 
         AlertDialog dialog = builder.create();
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
+//        dialog.getWindow().setGravity(Gravity.BOTTOM);
         dialog.show();
     }
 
@@ -552,5 +562,68 @@ public class Play extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    public void tutorialShowCaseView(){
+        new scvPlayTutorial(this);
+    }
+
+    private static class scvPlayTutorial implements View.OnClickListener{
+        private byte counter;
+        private ShowcaseView scv;
+        private Activity context;
+
+        private scvPlayTutorial(Activity context) {
+            this.counter = 0;
+            this.context = context;
+            this.scv = new ShowcaseView.Builder(context)
+                    .withNewStyleShowcase()
+                    .setStyle(R.style.CustomShowcaseTheme)
+                    .setTarget(Target.NONE)
+                    .setContentTitle("This is the game screen")
+                    .setContentText("")
+                    .setOnClickListener(this)
+                    .build();
+
+            scv.setButtonText("Next");
+        }
+
+        @Override
+        public void onClick(View view) {
+            switch (counter) {
+                case 0:
+                    scv.setShowcase(new ViewTarget(R.id.game_board, context), true);
+                    scv.setContentTitle("This is the Grid");
+                    scv.setContentText("Tap the tiles to fill the grid.");
+                    break;
+                case 1:
+                    scv.setContentText("Don't get three colors in a row or else you lose.");
+                    break;
+                case 2:
+                    scv.setShowcase(new ViewTarget(R.id.previewColor, context), true);
+                    scv.setContentTitle("Color preview");
+                    scv.setContentText("This shows the color shown on the next tap.");
+
+                    if(context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                        scv.setButtonPosition(Config.getBottomLeftParams(context));
+                    break;
+                case 3:
+                    scv.setShowcase(new ViewTarget(R.id.clockView, context), true);
+                    scv.setContentTitle("Timer");
+                    scv.setContentText("Fill the grid before the timer reaches zero");
+                    scv.setButtonPosition(Config.getBottomRightParams(context));
+                    break;
+                case 4:
+                    scv.setTarget(Target.NONE);
+                    scv.setContentTitle("Winning");
+                    scv.setContentText("If your time is fast enough you can submit you name for a High Score");
+                    break;
+                case 5:
+                    scv.hide();
+                    Config.createShowCaseIntent(context, Settings.class);
+                    break;
+            }
+            ++counter;
+        }
     }
 }

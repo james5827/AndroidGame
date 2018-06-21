@@ -41,7 +41,7 @@ public class Help extends AppCompatActivity {
                     .setTarget(new ViewTarget(R.id.button, this))
                     .setContentTitle("Showcase View Library")
                     .setContentText("This Library Will Be Used For An In App Tutorial")
-                    .setOnClickListener((View view1) -> createShowCaseIntent(Help.this, Home.class))
+                    .setOnClickListener((View view1) -> Config.createShowCaseIntent(Help.this, Home.class))
                     .build();
         });
     }
@@ -71,11 +71,5 @@ public class Help extends AppCompatActivity {
 
         startActivity(i);
         return super.onOptionsItemSelected(item);
-    }
-
-    public void createShowCaseIntent(Context context, Class<?> cls){
-        Intent intent = new Intent(context, cls);
-        intent.putExtra("Tutorial", true);
-        startActivity(intent);
     }
 }

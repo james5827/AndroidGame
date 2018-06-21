@@ -1,12 +1,8 @@
 package com.example.jamesoneill.three_in_a_row;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -101,15 +97,15 @@ public class Home extends AppCompatActivity {
     }
 
     private void tutorialShowCaseView(){
-        new scvTutorial(this);
+        new scvHomeTutorial(this);
     }
 
-    private static class scvTutorial implements View.OnClickListener{
+    private class scvHomeTutorial implements View.OnClickListener{
         private byte counter;
         private ShowcaseView scv;
         private Activity context;
 
-        private scvTutorial(Activity context) {
+        private scvHomeTutorial(Activity context) {
             this.counter = 0;
             this.context = context;
             this.scv = new ShowcaseView.Builder(context)
@@ -130,15 +126,28 @@ public class Home extends AppCompatActivity {
             switch (counter) {
                 case 0:
                     scv.setShowcase(new ViewTarget(R.id.btn_settings, context), false);
+                    scv.setContentTitle("Settings Button");
+                    scv.setContentText("This button will take you to the settings screen, where you can change game settings.");
                 break;
                 case 1:
                     scv.setShowcase(new ViewTarget(R.id.btn_highscores, context), true);
+                    scv.setContentTitle("High Scores Button");
+                    scv.setContentText("This button will take you to the high score screen, where you can see your highscores.");
                 break;
                 case 2:
                     scv.setShowcase(new ViewTarget(R.id.btn_help, context), true);
+                    scv.setContentTitle("Help Button");
+                    scv.setContentText("This button will take you to the help screen, you can access various tutorials here.");
+                    scv.setButtonPosition(Config.getBottomLeftParams(context));
                 break;
                 case 3:
                     scv.setShowcase(new ViewTarget(R.id.btn_play, context), true);
+                    scv.setContentTitle("Play");
+                    scv.setContentText("Swiping will take you to the game screen.");
+                break;
+                case 4:
+                    scv.hide();
+                    Config.createShowCaseIntent(Home.this, Play.class);
                 break;
             }
             ++counter;

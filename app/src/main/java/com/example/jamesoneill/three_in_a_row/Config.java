@@ -1,9 +1,13 @@
 package com.example.jamesoneill.three_in_a_row;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 /**
  * Created by James O'Neill on 20/03/2018.
@@ -135,5 +139,29 @@ public class Config
      */
     public static int getTimerSeconds() {
         return Config.timerSeconds;
+    }
+
+    public static void createShowCaseIntent(Context context, Class<?> cls){
+        Intent intent = new Intent(context, cls);
+        intent.putExtra("Tutorial", true);
+        context.startActivity(intent);
+    }
+
+    public static android.widget.RelativeLayout.LayoutParams getBottomLeftParams(Activity context) {
+        RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lps.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        int margin = ((Number) (context.getResources().getDisplayMetrics().density * 16)).intValue();
+        lps.setMargins(margin, margin, margin, margin);
+        return lps;
+    }
+
+    public static android.widget.RelativeLayout.LayoutParams getBottomRightParams(Activity context) {
+        RelativeLayout.LayoutParams lps = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lps.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        lps.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        int margin = ((Number) (context.getResources().getDisplayMetrics().density * 16)).intValue();
+        lps.setMargins(margin, margin, margin, margin);
+        return lps;
     }
 }
