@@ -29,9 +29,11 @@
 
     <style name="CustomTitle" parent="TextAppearance.ShowcaseView.Title.Light">
         <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">30sp</item>
     </style>
 
     <style name="CustomText" parent="TextAppearance.ShowcaseView.Detail.Light">
-        <item name="android:textColor">#b4ffffff</item>
+        <item name="android:textColor">#c8ffffff</item>
+        <item name="android:textSize">25sp</item>
     </style>
 </resources>

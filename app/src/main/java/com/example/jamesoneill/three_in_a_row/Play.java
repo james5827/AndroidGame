@@ -1,14 +1,10 @@
 package com.example.jamesoneill.three_in_a_row;
 
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.os.PersistableBundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -23,9 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.BufferedOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -40,8 +34,7 @@ public class Play extends AppCompatActivity {
     //These Colors alternate based off of the boolean useFirst
     private int firstColor;
     private int secondColor;
-    private boolean useFirst = false;
-    private String TAG = "State";
+    private boolean useFirst;
     /*
       Parallel array that translates to the one dimensional
       grid array in order to ease manipulation and the execution of game logic
@@ -56,6 +49,7 @@ public class Play extends AppCompatActivity {
     private Handler clockHandler;
     private Handler timeOutHandler;
     private boolean activeClock = true;
+    private int secondsLeft;
 
     private byte turnTracker = 4;
 
@@ -70,6 +64,7 @@ public class Play extends AppCompatActivity {
         firstColor = Config.getFirstColor();
         secondColor = Config.getSecondColor();
         byte numberOfTiles = (byte)Math.pow(Config.getColNumbers(), 2);
+        View preview = findViewById(R.id.previewColor);
 
         byte[] initiatedColors;
         byte[] firstColorArray;
@@ -84,10 +79,7 @@ public class Play extends AppCompatActivity {
         }
 
         if (savedInstanceState != null) {
-            Log.i("State", "onCreate: Restoring State ");
-
             byte[] initGridColor = new byte[Config.getColNumbers() * Config.getColNumbers()];
-
             byte position = 0;
             colorTracker = (byte[][]) savedInstanceState.getSerializable("colorTracker");
 
@@ -120,13 +112,13 @@ public class Play extends AppCompatActivity {
                     }
                 }
             }
+            useFirst = savedInstanceState.getBoolean("useFirst");
+            turnTracker = savedInstanceState.getByte("turnTracker");
+            secondsLeft = savedInstanceState.getInt("secondsLeft");
 
-            Log.i(TAG, "onCreate: initgridcolor" + Arrays.toString(initGridColor));
-            Log.i(TAG, "onCreate: test" + Arrays.deepToString(colorTracker));
-            Log.i(TAG, "onCreate: enabledArray" + Arrays.toString(initiatedColors));
-
+            Log.i("State", "onCreate: Receving " + useFirst);
+            preview.setBackgroundColor(useFirst ? firstColor: secondColor);
         } else {
-
             colorTracker = new byte[Config.getColNumbers()][Config.getColNumbers()];
             //array that tracks the tiles to be pre-selected
             initiatedColors = new byte[4];
@@ -167,14 +159,12 @@ public class Play extends AppCompatActivity {
                 colorTracker[x][y] = SECOND_COLOR;
                 gridTiles.get(val).setBackgroundColor(secondColor);
             }
+
+            useFirst = false;
+            secondsLeft = Config.getTimerSeconds();
+            preview.setBackgroundColor(secondColor);
         }
 
-        //View that displays the next color
-        View preview = findViewById(R.id.previewColor);
-
-        //set half the random numbers array to the second color
-
-        preview.setBackgroundColor(secondColor);
         //get application display metrics
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -190,7 +180,7 @@ public class Play extends AppCompatActivity {
 
         //create clock
         TextView clock = findViewById(R.id.clockView);
-        clock.setText(formatClockString(Config.getTimerSeconds()));
+        clock.setText(formatClockString(secondsLeft));
 
         //handles the updating of the clock
         clockHandler = new Handler(Looper.getMainLooper()){
@@ -226,8 +216,9 @@ public class Play extends AppCompatActivity {
         this.activeClock = false;
 
         outState.putSerializable("colorTracker", colorTracker);
-
-        Log.i("State", "onSaveInstanceState: Saving");
+        outState.putByte("turnTracker", turnTracker);
+        outState.putInt("secondsLeft", secondsLeft);
+        outState.putBoolean("useFirst", useFirst);
     }
 
     @Override
@@ -280,8 +271,9 @@ public class Play extends AppCompatActivity {
     {
         Runnable clock = () -> {
             try{
-                for(int i = Config.getTimerSeconds(); i >= 0; --i) {
+                for(int i = Play.this.secondsLeft; i >= 0; --i) {
                     if (activeClock) {
+                        --Play.this.secondsLeft;
                         Message message = new Message();
                         Bundle bundle = new Bundle();
                         bundle.putInt("second", i);
@@ -334,8 +326,6 @@ public class Play extends AppCompatActivity {
         //convert to 2 dimensional array from tile position
         byte x = (byte) (i/Config.getColNumbers());
         byte y = (byte) (i%Config.getColNumbers());
-
-        Log.i("State", "tileClick: " + Arrays.deepToString(colorTracker));
 
         //update the preview color
         View preview = findViewById(R.id.previewColor);

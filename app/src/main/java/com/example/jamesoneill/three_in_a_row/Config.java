@@ -19,6 +19,7 @@ public class Config
     private static int firstColor;
     private static int secondColor;
     private static int defaultColor;
+    public static final String TUTORIAL = "Tutorial";
 
     /**
      * Load settings from sharedPreference
