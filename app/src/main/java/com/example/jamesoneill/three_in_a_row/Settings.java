@@ -44,6 +44,10 @@ public class Settings extends AppCompatActivity {
     private SeekBar color2Green;
     private SeekBar color2Blue;
 
+    private SeekBar gridSize;
+
+    private Spinner spinner;
+
     private byte currentTab;
     private final byte DEFAULT_TILE_TAB = 0;
     private final byte FIRST_TILE_TAB = 1;
@@ -62,7 +66,7 @@ public class Settings extends AppCompatActivity {
 
         initializeSeekBars();
 
-        Spinner spinner = findViewById(R.id.settingsSpinner);
+        spinner = findViewById(R.id.settingsSpinner);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -86,7 +90,7 @@ public class Settings extends AppCompatActivity {
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {}
         });
-        SeekBar gridSize = findViewById(R.id.gridSeek);
+        gridSize = findViewById(R.id.gridSeek);
         TextView lblGridView = findViewById(R.id.lblGridSeek);
         gridSize.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
             @Override
@@ -131,20 +135,9 @@ public class Settings extends AppCompatActivity {
             }
         });
 
-        switch (Config.getTimerSeconds()){
-            case 45:
-                spinner.setSelection(0, true);
-                break;
-            case 30:
-                spinner.setSelection(1, true);
-                break;
-            case 15:
-                spinner.setSelection(2, true);
-                break;
-        }
+        initDifficulty();
 
-        gridSize.setProgress(Config.getColNumbers() -4);
-        lblGridView.setText(String.format(getString(R.string.grid_size_seek_bar), Config.getColNumbers()));
+        initGridSize();
 
         if(getIntent().hasExtra(Config.TUTORIAL)){
             tutorialShowCaseView();
@@ -199,7 +192,17 @@ public class Settings extends AppCompatActivity {
      * Reset all settings to default and save to SharedPreferences
      */
     private void resetSettings() {
+        Config.setDefaultColor(Color.red(Color.GRAY), Color.green(Color.GRAY), Color.blue(Color.GRAY));
+        Config.setFirstColor(0,0,0);
+        Config.setSecondColor(255,255,255);
 
+        initializeSeekBars();
+
+        Config.setTimerSeconds(45);
+        initDifficulty();
+
+        Config.setColNumbers(4);
+        initGridSize();
     }
 
     /**
@@ -328,6 +331,26 @@ public class Settings extends AppCompatActivity {
         color2Red.setOnSeekBarChangeListener(new redSeekBarChange());
         color2Green.setOnSeekBarChangeListener(new GreenSeekBarChange());
         color2Blue.setOnSeekBarChangeListener(new BlueSeekBarChange());
+    }
+
+    private void initDifficulty () {
+        switch (Config.getTimerSeconds()){
+            case 45:
+                spinner.setSelection(0, true);
+                break;
+            case 30:
+                spinner.setSelection(1, true);
+                break;
+            case 15:
+                spinner.setSelection(2, true);
+                break;
+        }
+    }
+
+    private void initGridSize(){
+        TextView lblGridView = findViewById(R.id.lblGridSeek);
+        gridSize.setProgress(Config.getColNumbers() -4);
+        lblGridView.setText(String.format(getString(R.string.grid_size_seek_bar), Config.getColNumbers()));
     }
 
     /**
