@@ -1,6 +1,7 @@
 package com.example.jamesoneill.three_in_a_row;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -96,10 +97,9 @@ public class Highscores extends AppCompatActivity {
             this.scv = new ShowcaseView.Builder(context)
                     .withNewStyleShowcase()
                     .setStyle(R.style.CustomShowcaseTheme)
-                    .blockAllTouches()
                     .setTarget(Target.NONE)
-                    .setContentTitle("This is the Home Screen")
-                    .setContentText("From here you can navigate around the rest of the application")
+                    .setContentTitle("This is the High Score Screen")
+                    .setContentText("Alter the grid size slider and the difficulty to see the best scores for games with those parameters")
                     .setOnClickListener(this)
                     .build();
 
@@ -110,29 +110,24 @@ public class Highscores extends AppCompatActivity {
         public void onClick(View view) {
             switch (counter) {
                 case 0:
-                    scv.setShowcase(new ViewTarget(R.id.btn_settings, context), false);
-                    scv.setContentTitle("Settings Button");
-                    scv.setContentText("This button will take you to the settings screen, where you can change game settings.");
-                    break;
+                    scv.setShowcase(new ViewTarget(R.id.gridSeekHighScores, context), true);
+                    scv.setContentTitle("Grid Slider");
+                    scv.setContentText("Change the grid slider");
+                break;
                 case 1:
-                    scv.setShowcase(new ViewTarget(R.id.btn_highscores, context), true);
-                    scv.setContentTitle("High Scores Button");
-                    scv.setContentText("This button will take you to the high score screen, where you can see your highscores.");
+                    scv.setShowcase(new ViewTarget(R.id.highScoreSpinner, context), true);
+                    scv.setContentTitle("Difficulty Select Box");
+                    scv.setContentText("Change the difficulty");
                     break;
                 case 2:
-                    scv.setShowcase(new ViewTarget(R.id.btn_help, context), true);
-                    scv.setContentTitle("Help Button");
-                    scv.setContentText("This button will take you to the help screen, you can access various tutorials here.");
-                    scv.setButtonPosition(Config.getBottomLeftParams(context));
+                    scv.setShowcase(new ViewTarget(R.id.highScoreRecyclerView, context), true);
+                    scv.setContentTitle("Highscores");
+                    scv.setContentText("Here are the high scores for those settings");
                     break;
                 case 3:
-                    scv.setShowcase(new ViewTarget(R.id.btn_play, context), true);
-                    scv.setContentTitle("Play");
-                    scv.setContentText("Swiping will take you to the game screen.");
-                    break;
-                case 4:
                     scv.hide();
-                    Config.createShowCaseIntent(Highscores.this, Play.class);
+                    Intent intent = new Intent(context, Home.class);
+                    context.startActivity(intent);
                     break;
             }
             ++counter;

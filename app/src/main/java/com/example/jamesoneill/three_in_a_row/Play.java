@@ -1,8 +1,13 @@
 package com.example.jamesoneill.three_in_a_row;
 
+import android.animation.AnimatorSet;
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,6 +21,9 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -330,6 +338,7 @@ public class Play extends AppCompatActivity {
      */
     private void tileClick(AdapterView<?> adapterView, View view, int i, long l)
     {
+
         //increment the number of turns
         ++turnTracker;
 
@@ -342,7 +351,16 @@ public class Play extends AppCompatActivity {
         preview.setBackgroundColor(useFirst ? secondColor: firstColor);
 
         //change the tile background color
-        view.setBackgroundColor(useFirst ? firstColor: secondColor);
+        //view.setBackgroundColor(useFirst ? firstColor: secondColor);
+
+        ValueAnimator colorAnim = ValueAnimator.ofArgb(Config.getDefaultColor(), useFirst ? firstColor: secondColor);
+        colorAnim.setDuration(300);
+        colorAnim.addUpdateListener(valueAnimator1 -> view.setBackgroundColor((int) valueAnimator1.getAnimatedValue()));
+        colorAnim.start();
+
+        Animation scaleAnim = AnimationUtils.loadAnimation(this, R.anim.scale_animation);
+        view.startAnimation(scaleAnim);
+
         GridAdapter adapter = (GridAdapter) adapterView.getAdapter();
 
         //update color tracker
@@ -616,7 +634,7 @@ public class Play extends AppCompatActivity {
                 case 4:
                     scv.setTarget(Target.NONE);
                     scv.setContentTitle("Winning");
-                    scv.setContentText("If your time is fast enough you can submit you name for a High Score");
+                    scv.setContentText("If your time is fast enough you can submit your name for a High Score");
                     break;
                 case 5:
                     scv.hide();
