@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Three In A Row</string>
     <string name="btn_play">Play</string>
-    <string name="btn_help">Help</string>
+    <string name="btn_help">Tutorial</string>
     <string name="h_title">Three In A Row</string>
     <string name="title_activity_play">Play</string>
     <string name="lose">You Lose</string>

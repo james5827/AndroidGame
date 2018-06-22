@@ -184,7 +184,8 @@ public class Settings extends AppCompatActivity {
                 i = null;
                 break;
             case R.id.settings_menu_help:
-                i = new Intent(this, Help.class);
+                i = new Intent(this, Home.class);
+                i.putExtra("Tutorial", true);
                 break;
         }
 
@@ -444,7 +445,7 @@ public class Settings extends AppCompatActivity {
         public void onClick(View view) {
             switch (counter) {
                 case 0:
-                    scv.setShowcase(new ViewTarget(R.id.lblGridSeek, context), true);
+                    scv.setShowcase(new ViewTarget(R.id.lblGridSeek, context), false);
                     scv.setContentTitle("Grid Size Seek Bar");
                     scv.setContentText("This seek bar controls the size of the game grid");
                     break;

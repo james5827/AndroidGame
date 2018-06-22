@@ -28,10 +28,6 @@
             android:label="@string/settings"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".Help"
-            android:label="@string/title_activity_help"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".Highscores"
             android:label="@string/title_activity_highscores"
             android:theme="@style/AppTheme" />

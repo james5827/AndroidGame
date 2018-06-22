@@ -33,7 +33,6 @@ public class Home extends AppCompatActivity {
         Config.loadSettings(this.getApplicationContext());
 
         if(getIntent().hasExtra(Config.TUTORIAL)){
-            Log.i(TAG, "onCreate: It worked maybe");
             tutorialShowCaseView();
         }
     }
@@ -57,7 +56,8 @@ public class Home extends AppCompatActivity {
                 i = new Intent(this, Settings.class);
                 break;
             case R.id.home_menu_help:
-                i = new Intent(this, Help.class);
+                i = new Intent(this, Home.class);
+                i.putExtra("Tutorial", true);
                 break;
         }
 
@@ -88,8 +88,7 @@ public class Home extends AppCompatActivity {
      * @param view the button that was clicked
      */
     public void openHelpActivity(View view) {
-        Intent help = new Intent(this, Help.class);
-        startActivity(help);
+        tutorialShowCaseView();
     }
 
     public void openHighScoresActivity(View view) {
@@ -136,8 +135,8 @@ public class Home extends AppCompatActivity {
                 break;
                 case 2:
                     scv.setShowcase(new ViewTarget(R.id.btn_help, context), true);
-                    scv.setContentTitle("Help Button");
-                    scv.setContentText("This button will take you to the help screen, you can access various tutorials here.");
+                    scv.setContentTitle("Tutorial Button");
+                    scv.setContentText("This button will give you a tour of the application");
                     scv.setButtonPosition(Config.getBottomLeftParams(context));
                 break;
                 case 3:

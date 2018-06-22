@@ -263,7 +263,8 @@ public class Play extends AppCompatActivity {
                 i = new Intent(this, Settings.class);
                 break;
             case R.id.play_menu_help:
-                i = new Intent(this, Help.class);
+                i = new Intent(this, Home.class);
+                i.putExtra("Tutorial", true);
                 break;
         }
 
