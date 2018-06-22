@@ -139,7 +139,7 @@ public class Highscores extends AppCompatActivity {
                     scv.setContentText("Change the difficulty");
                     break;
                 case 2:
-                    scv.setShowcase(new ViewTarget(R.id.highScoreRecyclerView, context), true);
+                    scv.setShowcase(new ViewTarget(R.id.noRecordstxt, context), true);
                     scv.setContentTitle("Highscores");
                     scv.setContentText("Here are the high scores for those settings");
                     break;

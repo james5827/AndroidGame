@@ -195,12 +195,13 @@
         style="@style/Widget.AppCompat.SeekBar.Discrete"
         android:layout_width="250dp"
         android:layout_height="31dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:max="3"
         android:progress="1"
         app:layout_constraintBottom_toBottomOf="@+id/lblGridSeek"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/lblGridSeek" />
+        app:layout_constraintTop_toTopOf="@+id/lblGridSeek"
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/lblGridSeek"
@@ -215,7 +216,7 @@
         app:layout_constraintBottom_toTopOf="@+id/tabHost"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.156" />
+        app:layout_constraintVertical_bias="0.093" />
 
     <TextView
         android:id="@+id/settingsDifficultyLabel"
@@ -237,10 +238,11 @@
         android:id="@+id/settingsSpinner"
         android:layout_width="250dp"
         android:layout_height="31dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="16dp"
         android:entries="@array/difficulty_array"
         app:layout_constraintBottom_toBottomOf="@+id/settingsDifficultyLabel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/settingsDifficultyLabel" />
+        app:layout_constraintTop_toTopOf="@+id/settingsDifficultyLabel"
+        app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>

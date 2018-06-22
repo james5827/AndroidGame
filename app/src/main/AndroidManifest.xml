@@ -26,10 +26,12 @@
         <activity
             android:name=".Settings"
             android:label="@string/settings"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".Highscores"
             android:label="@string/title_activity_highscores"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
     </application>
 
