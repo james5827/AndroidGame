@@ -447,6 +447,7 @@ public class Play extends AppCompatActivity {
                     ++inARow;
                     if(inARow == 3) {
                         gameOverAlert();
+                        return;
                     }
                 } else {
                     break;
