@@ -54,5 +54,4 @@ public class ScoreRVAdapter extends RecyclerView.Adapter<ScoreRVAdapter.ViewHold
             Log.i("scores", "ViewHolder: ");
         }
     }
-
 }

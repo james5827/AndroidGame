@@ -3,13 +3,11 @@ package com.example.jamesoneill.three_in_a_row;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -18,13 +16,14 @@ import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Highscores extends AppCompatActivity {
 
-    SeekBar gridSizeSeek;
-    Spinner difficultySpinner;
+    private SeekBar gridSizeSeek;
+    private Spinner difficultySpinner;
+    private RecyclerView recyclerView;
+    private TextView noRecordstxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,21 +32,39 @@ public class Highscores extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        recyclerView = findViewById(R.id.highScoreRecyclerView);
+
         this.difficultySpinner = findViewById(R.id.highScoreSpinner);
+        difficultySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                displayScores();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {}
+        });
+
         initialiseGridSizeSeekBar();
 
         if(getIntent().hasExtra(Config.TUTORIAL)){
             tutorialShowCaseView();
         }
+
+        noRecordstxt = findViewById(R.id.noRecordstxt);
     }
 
-    public void displayScores(View view){
+    public void displayScores(){
+        recyclerView.setAdapter(null);
+        noRecordstxt.setText("");
         HighscoreDatabase db = new HighscoreDatabase(this);
 
         List<Score> scores = db.getHighScores(difficultySpinner.getSelectedItem().toString(), (byte) (gridSizeSeek.getProgress() + 4));
 
-        RecyclerView recyclerView = findViewById(R.id.highScoreRecyclerView);
-        recyclerView.setAdapter(new ScoreRVAdapter(this, scores));
+        if(scores.size() > 0)
+            recyclerView.setAdapter(new ScoreRVAdapter(this, scores));
+        else
+            noRecordstxt.setText(R.string.noRowstxt);
     }
 
     private void initialiseGridSizeSeekBar(){
@@ -75,7 +92,9 @@ public class Highscores extends AppCompatActivity {
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                displayScores();
+            }
         });
 
         this.gridSizeSeek.setProgress(Config.getColNumbers() -4);

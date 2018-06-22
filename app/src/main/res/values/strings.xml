@@ -26,6 +26,7 @@
     <string name="name">Name:</string>
     <string name="play_again">Submit</string>
     <string name="back">Quit</string>
+    <string name="noRowstxt">No Records For These Parameters</string>
 
     <string-array name="difficulty_array">
         <item>Easy</item>
