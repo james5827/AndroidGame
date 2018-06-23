@@ -3,9 +3,11 @@ package com.example.jamesoneill.three_in_a_row;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,9 +21,9 @@ import com.github.amlcurran.showcaseview.targets.ViewTarget;
  * this screen acts as the navigation hub
  * and displays the current high scores
  */
-public class Home extends AppCompatActivity {
+public class Home extends AppCompatActivity implements GestureDetector.OnGestureListener{
 
-    private static final String TAG = "home";
+    private GestureDetectorCompat mDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,8 @@ public class Home extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Config.loadSettings(this.getApplicationContext());
+
+        mDetector = new GestureDetectorCompat(this, this);
 
         if(getIntent().hasExtra(Config.TUTORIAL)){
             tutorialShowCaseView();
@@ -99,6 +103,35 @@ public class Home extends AppCompatActivity {
         new scvHomeTutorial(this);
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event){
+        if (this.mDetector.onTouchEvent(event)) {
+            return true;
+        }
+        return super.onTouchEvent(event);
+    }
+
+    @Override
+    public boolean onDown(MotionEvent motionEvent) { return false; }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) { }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent motionEvent) { return false; }
+
+    @Override
+    public boolean onScroll(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) { return false; }
+
+    @Override
+    public void onLongPress(MotionEvent motionEvent) { }
+
+    @Override
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        openPlayActivity(new View(this));
+        return true;
+    }
+
     private class scvHomeTutorial implements View.OnClickListener{
         private byte counter;
         private ShowcaseView scv;
@@ -140,7 +173,7 @@ public class Home extends AppCompatActivity {
                     scv.setButtonPosition(Config.getBottomLeftParams(context));
                 break;
                 case 3:
-                    scv.setShowcase(new ViewTarget(R.id.btn_play, context), true);
+                    scv.setShowcase(new ViewTarget(R.id.btnTextView, context), true);
                     scv.setContentTitle("Play");
                     scv.setContentText("Swiping will take you to the game screen.");
                 break;

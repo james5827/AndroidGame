@@ -27,6 +27,7 @@
     <string name="play_again">Submit</string>
     <string name="back">Quit</string>
     <string name="noRowstxt">No Records For These Parameters</string>
+    <string name="swipe_to_play">Swipe To Play</string>
 
     <string-array name="difficulty_array">
         <item>Easy</item>

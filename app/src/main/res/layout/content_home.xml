@@ -8,15 +8,15 @@
     tools:context="com.example.jamesoneill.three_in_a_row.Home"
     tools:showIn="@layout/activity_home">
 
-    <Button
-        android:id="@+id/btn_play"
+    <TextView
+        android:id="@+id/btnTextView"
         android:layout_width="306dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="84dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:text="@string/btn_play"
-        android:onClick="openPlayActivity"
+        android:layout_marginBottom="76dp"
+        android:text="@string/swipe_to_play"
+        android:textAlignment="center"
+        android:textAppearance="@android:style/TextAppearance.Material.Large"
+        android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -28,8 +28,8 @@
         android:layout_marginTop="8dp"
         android:text="@string/settings"
         android:onClick="openSettingsActivity"
-        app:layout_constraintStart_toStartOf="@+id/btn_play"
-        app:layout_constraintTop_toBottomOf="@+id/btn_play" />
+        app:layout_constraintStart_toStartOf="@+id/btnTextView"
+        app:layout_constraintTop_toBottomOf="@+id/btnTextView" />
 
     <Button
         android:id="@+id/btn_help"
@@ -38,7 +38,7 @@
         android:text="@string/btn_help"
         android:onClick="openHelpActivity"
         app:layout_constraintBottom_toBottomOf="@+id/btn_settings"
-        app:layout_constraintEnd_toEndOf="@+id/btn_play" />
+        app:layout_constraintEnd_toEndOf="@+id/btnTextView" />
 
     <TextView
         android:id="@+id/h_title"
@@ -70,7 +70,7 @@
         app:layout_constraintEnd_toStartOf="@+id/btn_help"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/btn_settings"
-        app:layout_constraintTop_toBottomOf="@+id/btn_play"
+        app:layout_constraintTop_toBottomOf="@+id/btnTextView"
         app:layout_constraintVertical_bias="0.0" />
 
 </android.support.constraint.ConstraintLayout>
