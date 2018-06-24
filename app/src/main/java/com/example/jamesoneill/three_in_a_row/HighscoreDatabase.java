@@ -34,7 +34,6 @@ public class HighscoreDatabase extends SQLiteOpenHelper implements DatabaseHelpe
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-//        values.put(KEY_SCORE_ID, "NULL");
         values.put(KEY_SCORE_NAME, score.getName());
         values.put(KEY_SCORE_GRIDSIZE, score.getGridSize());
         values.put(KEY_SCORE_DIFFICULTY, score.getDifficulty());

@@ -588,7 +588,7 @@ public class Play extends AppCompatActivity {
         new scvPlayTutorial(this);
     }
 
-    private static class scvPlayTutorial implements View.OnClickListener{
+    private class scvPlayTutorial implements View.OnClickListener{
         private byte counter;
         private ShowcaseView scv;
         private Activity context;
@@ -640,7 +640,8 @@ public class Play extends AppCompatActivity {
                     break;
                 case 5:
                     scv.hide();
-                    Config.createShowCaseIntent(context, Settings.class);
+                    Config.createShowCaseIntent(Play.this, Settings.class);
+                    context.finish();
                     break;
             }
             ++counter;

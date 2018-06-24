@@ -18,7 +18,6 @@ public class ScoreRVAdapter extends RecyclerView.Adapter<ScoreRVAdapter.ViewHold
     private List<Score> items;
 
     ScoreRVAdapter(Context context, List<Score> items){
-        Log.i("scores", "Constructor: " + items.toString());
         this.context = context;
         this.items = items;
     }
@@ -27,14 +26,12 @@ public class ScoreRVAdapter extends RecyclerView.Adapter<ScoreRVAdapter.ViewHold
     public ScoreRVAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
         LayoutInflater inflater = LayoutInflater.from(this.context);
         View itemView = inflater.inflate(R.layout.list_item, parent, false);
-        Log.i("scores", "onCreateViewHolder: ");
         return new ViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ScoreRVAdapter.ViewHolder holder, int position) {
         final Score score = this.items.get(position);
-        Log.i("scores", "onBindViewHolder: " + score.toString());
         holder.text.setText((++position) + " " + score.getName() + " " + score.getTime() + " Seconds Left");
     }
 
@@ -51,7 +48,6 @@ public class ScoreRVAdapter extends RecyclerView.Adapter<ScoreRVAdapter.ViewHold
             super(itemView);
             this.text = itemView.findViewById(R.id.ScoreText);
             this.view = itemView;
-            Log.i("scores", "ViewHolder: ");
         }
     }
 }

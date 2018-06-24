@@ -513,6 +513,7 @@ public class Settings extends AppCompatActivity {
                 case 9:
                     scv.hide();
                     Config.createShowCaseIntent(context, Highscores.class);
+                    context.finish();
             }
             ++counter;
         }

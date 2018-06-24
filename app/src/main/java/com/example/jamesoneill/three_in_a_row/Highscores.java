@@ -147,6 +147,7 @@ public class Highscores extends AppCompatActivity {
                     scv.hide();
                     Intent intent = new Intent(context, Home.class);
                     context.startActivity(intent);
+                    context.finish();
                     break;
             }
             ++counter;

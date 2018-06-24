@@ -1,8 +1,6 @@
 package com.example.jamesoneill.three_in_a_row;
 
 public interface DatabaseHelper {
-    String TAG = "Database";
-
     String DATABASE_NAME = "highscores";
     int DATABASE_VERSION = 1;
 
